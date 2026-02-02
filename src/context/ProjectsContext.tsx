@@ -107,7 +107,7 @@ export function ProjectsProvider({ children }: { children: React.ReactNode }) {
     if (isLoaded) {
       cleanExpiredProjects();
     }
-  }, [isLoaded]);
+  }, [isLoaded, cleanExpiredProjects]);
 
   const addProject = useCallback((projectData: Omit<Project, 'id' | 'createdAt' | 'expiresAt'>): string => {
     const now = new Date();

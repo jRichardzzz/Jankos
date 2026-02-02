@@ -38,8 +38,8 @@ const agentColors: Record<number, { border: string; glow: string; text: string }
 // Composant pour un avatar individuel avec son onde lumineuse
 function AvatarCard({ 
   item, 
-  index, 
-  totalItems,
+  index: _index, 
+  totalItems: _totalItems,
   hoveredIndex, 
   setHoveredIndex 
 }: { 

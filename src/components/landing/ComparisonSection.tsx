@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Check, X, Zap, Clock, Eye, DollarSign, Timer, HelpCircle } from "lucide-react";
+import { Check, X, Zap, Eye, DollarSign, Timer, HelpCircle } from "lucide-react";
 
 const jankosFeatures = [
   {
