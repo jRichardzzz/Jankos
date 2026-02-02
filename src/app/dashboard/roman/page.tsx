@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCredits } from "@/context/CreditsContext";
 import { useHistory } from "@/context/HistoryContext";
-import { Zap, Search, Target, FlaskConical, Sparkles, AlertCircle, Youtube, BookOpen, Feather, Copy, Check, BarChart3, ArrowLeft, Settings2 } from "lucide-react";
+import { Zap, Search, Target, Sparkles, AlertCircle, Youtube, BookOpen, Feather, Copy, Check, BarChart3, ArrowLeft, Settings2 } from "lucide-react";
 import {
   BarChart,
   Bar,

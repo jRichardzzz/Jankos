@@ -14,7 +14,6 @@ import {
   User, 
   Package,
   ArrowLeft,
-  ImageIcon,
   FolderOpen,
   Settings2,
   Zap

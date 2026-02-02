@@ -72,16 +72,6 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     return name[0]?.toUpperCase() || '?';
   };
 
-  // Get user first name for greeting
-  const getUserFirstName = () => {
-    if (!user) return '';
-    const fullName = user.user_metadata?.full_name || user.user_metadata?.name || '';
-    if (fullName) {
-      return fullName.split(' ')[0];
-    }
-    return user.email?.split('@')[0] || '';
-  };
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">

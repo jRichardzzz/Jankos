@@ -103,11 +103,12 @@ export function ProjectsProvider({ children }: { children: React.ReactNode }) {
   }, [projects, isLoaded]);
 
   // Clean expired projects on load
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (isLoaded) {
       cleanExpiredProjects();
     }
-  }, [isLoaded, cleanExpiredProjects]);
+  }, [isLoaded]);
 
   const addProject = useCallback((projectData: Omit<Project, 'id' | 'createdAt' | 'expiresAt'>): string => {
     const now = new Date();

@@ -38,14 +38,10 @@ const agentColors: Record<number, { border: string; glow: string; text: string }
 // Composant pour un avatar individuel avec son onde lumineuse
 function AvatarCard({ 
   item, 
-  index: _index, 
-  totalItems: _totalItems,
   hoveredIndex, 
   setHoveredIndex 
 }: { 
   item: TooltipItem; 
-  index: number;
-  totalItems: number;
   hoveredIndex: number | null; 
   setHoveredIndex: (id: number | null) => void;
 }) {
@@ -114,12 +110,10 @@ export function AnimatedTooltip({ items }: AnimatedTooltipProps) {
 
   return (
     <div className="flex gap-3">
-      {items.map((item, index) => (
+      {items.map((item) => (
         <AvatarCard
           key={item.id}
           item={item}
-          index={index}
-          totalItems={items.length}
           hoveredIndex={hoveredIndex}
           setHoveredIndex={setHoveredIndex}
         />
