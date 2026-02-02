@@ -1,27 +1,369 @@
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================
+   JANKOS.CC STYLE - Premium Dark Mode Design
+   ============================================ */
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* 
+     * Fond principal : Gris-bleu très profond
+     * Pas noir pur, mais une teinte froide qui ajoute de la profondeur
+     */
+    --background: 224 71% 4%;
+    --background-secondary: 222 47% 6%;
+    --background-elevated: 220 40% 8%;
+    
+    /* Texte */
+    --foreground: 210 40% 98%;
+    --foreground-muted: 215 20% 65%;
+    --foreground-subtle: 217 15% 45%;
+    
+    /* Surfaces */
+    --card: 222 47% 7%;
+    --card-foreground: 210 40% 98%;
+    --card-hover: 222 40% 10%;
+    
+    /* Accents - Dégradé orange/ambre ultra vif signature */
+    --accent-primary: 38 100% 60%;
+    --accent-secondary: 28 100% 55%;
+    --accent-tertiary: 45 100% 65%;
+    
+    /* Bordures */
+    --border: 220 15% 15%;
+    --border-glow: 30 80% 50%;
+    
+    /* Inputs & Rings */
+    --input: 220 15% 12%;
+    --ring: 30 80% 50%;
+    
+    /* Radius */
+    --radius: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    
+    /* shadcn compatibility */
+    --popover: 222 47% 6%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 30 80% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 40% 10%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 220 15% 12%;
+    --muted-foreground: 215 20% 55%;
+    --accent: 220 40% 12%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    @apply scroll-smooth;
+    color-scheme: dark;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    
+    /* 
+     * Effet de profondeur : Multiple radial gradients en arrière-plan
+     * Crée cette sensation de "lueur" subtile premium
+     */
+    background-color: hsl(var(--background));
+    background-image: 
+      /* Lueur orange en haut à gauche */
+      radial-gradient(
+        ellipse 80% 50% at 20% -10%,
+        hsl(var(--accent-primary) / 0.15) 0%,
+        transparent 50%
+      ),
+      /* Lueur bleue en haut à droite */
+      radial-gradient(
+        ellipse 60% 40% at 80% 0%,
+        hsl(var(--accent-tertiary) / 0.1) 0%,
+        transparent 50%
+      ),
+      /* Lueur subtile au centre */
+      radial-gradient(
+        ellipse 100% 100% at 50% 0%,
+        hsl(220 60% 10%) 0%,
+        hsl(var(--background)) 70%
+      );
+    background-attachment: fixed;
+  }
+  
+  /* Scrollbar personnalisée - Style minimaliste */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--foreground-subtle));
+  }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  /* ==========================================
+     EFFETS DE TEXTE
+     ========================================== */
+  
+  /* Dégradé de texte signature - Violet vers Cyan */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      135deg,
+      hsl(var(--accent-primary)) 0%,
+      hsl(var(--accent-secondary)) 50%,
+      hsl(var(--accent-tertiary)) 100%
+    );
+  }
+  
+  /* Dégradé plus doux pour sous-titres */
+  .text-gradient-soft {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      90deg,
+      hsl(var(--foreground)) 0%,
+      hsl(var(--foreground-muted)) 100%
+    );
+  }
+  
+  /* ==========================================
+     EFFETS DE LUEUR (GLOW)
+     ========================================== */
+  
+  /* Glow pour boutons principaux */
+  .glow {
+    box-shadow: 
+      0 0 20px -5px hsl(var(--accent-primary) / 0.5),
+      0 0 40px -10px hsl(var(--accent-primary) / 0.3),
+      0 0 60px -15px hsl(var(--accent-secondary) / 0.2);
+  }
+  
+  .glow-sm {
+    box-shadow: 
+      0 0 15px -3px hsl(var(--accent-primary) / 0.4),
+      0 0 25px -8px hsl(var(--accent-primary) / 0.2);
+  }
+  
+  /* Glow intense pour les zones produit */
+  .glow-intense {
+    box-shadow: 
+      0 0 40px -10px hsl(var(--accent-primary) / 0.4),
+      0 0 80px -20px hsl(var(--accent-secondary) / 0.3),
+      0 0 120px -30px hsl(var(--accent-tertiary) / 0.2);
+  }
+  
+  /* ==========================================
+     EFFETS DE VERRE (GLASSMORPHISM)
+     ========================================== */
+  
+  .glass {
+    @apply backdrop-blur-xl;
+    background: hsl(var(--card) / 0.6);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+  
+  .glass-strong {
+    @apply backdrop-blur-2xl;
+    background: hsl(var(--card) / 0.8);
+    border: 1px solid hsl(var(--border) / 0.8);
+  }
+  
+  /* ==========================================
+     BORDURES BRILLANTES
+     ========================================== */
+  
+  /* Bordure avec gradient subtil */
+  .border-gradient {
+    position: relative;
+  }
+  
+  .border-gradient::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--accent-primary) / 0.3) 0%,
+      hsl(var(--border) / 0.5) 50%,
+      hsl(var(--accent-tertiary) / 0.3) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  
+  /* Bordure qui brille au survol */
+  .border-glow-hover {
+    position: relative;
+    border: 1px solid hsl(var(--border));
+    transition: border-color 0.3s ease;
+  }
+  
+  .border-glow-hover:hover {
+    border-color: hsl(var(--accent-primary) / 0.5);
+  }
+  
+  .border-glow-hover::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--accent-primary) / 0) 0%,
+      hsl(var(--accent-primary) / 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .border-glow-hover:hover::after {
+    opacity: 1;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--accent-primary) / 0.1) 0%,
+      hsl(var(--accent-tertiary) / 0.1) 100%
+    );
+    filter: blur(10px);
+  }
+  
+  /* ==========================================
+     ANIMATIONS
+     ========================================== */
+  
+  /* Animation d'apparition fluide */
+  .animate-fade-up {
+    animation: fadeUp 0.8s ease-out forwards;
+  }
+  
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Animation de flottement subtil */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  /* Animation de pulsation douce pour les glows */
+  .animate-pulse-glow {
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+  
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 
+        0 0 30px -10px hsl(var(--accent-primary) / 0.4),
+        0 0 60px -15px hsl(var(--accent-secondary) / 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 0 40px -10px hsl(var(--accent-primary) / 0.5),
+        0 0 80px -15px hsl(var(--accent-secondary) / 0.3);
+    }
+  }
+  
+  /* Shimmer effect */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--accent-primary) / 0.1) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+  
+  /* ==========================================
+     COMPOSANTS UTILITAIRES
+     ========================================== */
+  
+  /* Container max-width avec padding responsive */
+  .container-custom {
+    @apply w-full mx-auto px-4 sm:px-6 lg:px-8;
+    max-width: 1280px;
+  }
+  
+  /* Grid overlay pour debug */
+  .debug-grid {
+    background-image: 
+      linear-gradient(hsl(var(--accent-primary) / 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--accent-primary) / 0.1) 1px, transparent 1px);
+    background-size: 100px 100px;
+  }
+
+  /* Animated gradient border */
+  @keyframes gradient-rotate {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-gradient-rotate {
+    background-size: 200% 200%;
+    animation: gradient-rotate 3s ease infinite;
   }
 }

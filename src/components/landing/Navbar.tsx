@@ -1,0 +1,341 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+
+const navLinks = [
+  { href: "#youtube-agent", label: "Youtube Agent IA" },
+  { href: "#pricing", label: "Tarifs" },
+  { href: "#faq", label: "FAQ" },
+];
+
+export function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <>
+      <motion.header
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ 
+          duration: 0.8, 
+          ease: [0.25, 0.46, 0.45, 0.94],
+          delay: 0.2 
+        }}
+        className={`
+          fixed top-0 left-0 right-0 z-50
+          px-4 sm:px-6
+          transition-all duration-500
+          ${isScrolled ? "pt-3" : "pt-5"}
+        `}
+      >
+        <nav
+          className={`
+            relative
+            flex items-center justify-between
+            w-full max-w-6xl mx-auto
+            transition-all duration-500
+            ${isScrolled ? "scale-[0.98]" : "scale-100"}
+          `}
+        >
+          {/* Logo Jankos.cc - Gauche */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex items-center"
+          >
+            <Link href="/" className="flex items-center gap-3 group">
+              {/* Icône logo avec J luxueux */}
+              <div className="relative w-10 h-10 rounded-xl bg-neutral-900 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-black/50 group-hover:border-amber-500/50 transition-all duration-300 overflow-hidden">
+                {/* Lettre J luxueuse en SVG avec dégradé */}
+                <svg viewBox="0 0 24 24" className="w-7 h-7 z-10" fill="none">
+                  <defs>
+                    <linearGradient id="navLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#fcd34d" />
+                      <stop offset="50%" stopColor="#f59e0b" />
+                      <stop offset="100%" stopColor="#d97706" />
+                    </linearGradient>
+                  </defs>
+                  <path 
+                    d="M7 5H15M15 5V15C15 17.7614 12.7614 20 10 20V20C8.34315 20 7 18.6569 7 17V16" 
+                    stroke="url(#navLogoGradient)" 
+                    strokeWidth="2.5" 
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                
+                {/* Lueur subtile */}
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-orange-500/5 opacity-50" />
+              </div>
+              
+              {/* Texte avec dégradé */}
+              <div className="hidden sm:flex items-baseline gap-0">
+                <span className="text-[22px] font-extrabold bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent tracking-tight">
+                  JANKOS
+                </span>
+                <span className="text-[22px] font-extrabold bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 bg-clip-text text-transparent">
+                  .cc
+                </span>
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* Menu burger - Mobile uniquement */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="
+              md:hidden
+              flex items-center justify-center
+              w-10 h-10
+              rounded-full
+              border border-white/10
+              bg-black/70
+              backdrop-blur-2xl
+              shadow-lg shadow-black/30
+            "
+          >
+            <svg
+              className="w-5 h-5 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              {isMobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+
+          {/* Menu centré - Desktop uniquement */}
+          <div
+            className="
+              hidden md:flex
+              absolute left-1/2 -translate-x-1/2
+              items-center gap-1
+              px-4 py-2
+              rounded-full
+              border border-white/10
+              bg-black/70
+              backdrop-blur-2xl
+              shadow-lg shadow-black/30
+            "
+          >
+            {navLinks.map((link, index) => (
+              <motion.div
+                key={link.href}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
+              >
+                <Link
+                  href={link.href}
+                  className="
+                    px-4 py-2
+                    text-sm font-medium
+                    text-gray-400
+                    hover:text-white
+                    transition-colors duration-300
+                    rounded-full
+                    hover:bg-white/5
+                  "
+                >
+                  {link.label}
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Espace vide pour centrer le menu sur mobile */}
+          <div className="hidden md:block w-10" />
+
+          {/* Boutons auth - Desktop */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.6, duration: 0.4 }}
+            className="
+              hidden md:flex
+              items-center gap-1
+              px-2 py-2
+              rounded-full
+              border border-white/10
+              bg-black/70
+              backdrop-blur-2xl
+              shadow-lg shadow-black/30
+            "
+          >
+            <Link
+              href="/login"
+              className="
+                px-3 py-1.5
+                text-sm font-medium
+                text-gray-400
+                hover:text-white
+                transition-colors duration-300
+                rounded-full
+                hover:bg-white/5
+              "
+            >
+              Connexion
+            </Link>
+
+            <Link
+              href="/signup"
+              className="
+                relative group
+                px-3 py-1.5
+                text-sm font-semibold
+                text-white
+                rounded-full
+                overflow-hidden
+                transition-all duration-300
+              "
+            >
+              <div
+                className="
+                  absolute inset-0
+                  bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500
+                  bg-[length:200%_100%]
+                  group-hover:bg-[position:100%_0]
+                  transition-all duration-500
+                "
+              />
+              <div
+                className="
+                  absolute inset-0
+                  rounded-full
+                  opacity-0 group-hover:opacity-100
+                  transition-opacity duration-300
+                "
+                style={{
+                  boxShadow: "0 0 20px 2px rgba(139, 92, 246, 0.4)",
+                }}
+              />
+              <span className="relative z-10">Inscription</span>
+            </Link>
+          </motion.div>
+
+          {/* Bouton Inscription - Mobile uniquement */}
+          <Link
+            href="/signup"
+            className="
+              md:hidden
+              relative group
+              px-4 py-2
+              text-sm font-semibold
+              text-white
+              rounded-full
+              overflow-hidden
+            "
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500" />
+            <span className="relative z-10">Inscription</span>
+          </Link>
+        </nav>
+      </motion.header>
+
+      {/* Menu mobile - Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 md:hidden"
+          >
+            {/* Backdrop */}
+            <div 
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            
+            {/* Menu content */}
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="
+                absolute top-0 left-0 bottom-0
+                w-72
+                bg-neutral-900
+                border-r border-white/10
+                p-6 pt-20
+              "
+            >
+              <div className="flex flex-col gap-2">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="
+                      px-4 py-3
+                      text-lg font-medium
+                      text-gray-300
+                      hover:text-white
+                      hover:bg-white/5
+                      rounded-xl
+                      transition-colors
+                    "
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                
+                <div className="border-t border-white/10 my-4" />
+                
+                <Link
+                  href="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="
+                    px-4 py-3
+                    text-lg font-medium
+                    text-gray-300
+                    hover:text-white
+                    hover:bg-white/5
+                    rounded-xl
+                    transition-colors
+                  "
+                >
+                  Connexion
+                </Link>
+                
+                <Link
+                  href="/signup"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="
+                    px-4 py-3
+                    text-lg font-semibold
+                    text-white
+                    bg-gradient-to-r from-amber-500 to-orange-500
+                    rounded-xl
+                    text-center
+                  "
+                >
+                  Inscription
+                </Link>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
