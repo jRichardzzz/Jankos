@@ -356,7 +356,8 @@ export function PricingSection() {
                         <ul className="space-y-2">
                           {feature.items.map((item, j) => {
                             const tooltipKey = `${plan.name}-${item}`;
-                            const hasTooltip = plan.tooltips && plan.tooltips[item];
+                            const tooltips = plan.tooltips as Record<string, string> | undefined;
+                            const tooltipText = tooltips?.[item];
                             return (
                               <li key={j} className="text-sm text-gray-600 flex items-start gap-2 relative">
                                 <svg className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -364,7 +365,7 @@ export function PricingSection() {
                                 </svg>
                                 <span className="flex items-center gap-1.5">
                                   {item}
-                                  {hasTooltip && (
+                                  {tooltipText && (
                                     <button
                                       onClick={() => setActiveTooltip(activeTooltip === tooltipKey ? null : tooltipKey)}
                                       className="w-4 h-4 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-500 text-xs flex items-center justify-center transition-colors"
@@ -374,14 +375,14 @@ export function PricingSection() {
                                   )}
                                 </span>
                                 <AnimatePresence>
-                                  {hasTooltip && activeTooltip === tooltipKey && (
+                                  {tooltipText && activeTooltip === tooltipKey && (
                                     <motion.div
                                       initial={{ opacity: 0, y: -5 }}
                                       animate={{ opacity: 1, y: 0 }}
                                       exit={{ opacity: 0, y: -5 }}
                                       className="absolute left-0 top-full mt-1 z-50 bg-gray-900 text-white text-xs p-3 rounded-lg shadow-lg max-w-[200px]"
                                     >
-                                      {plan.tooltips[item]}
+                                      {tooltipText}
                                       <div className="absolute -top-1 left-4 w-2 h-2 bg-gray-900 rotate-45" />
                                     </motion.div>
                                   )}
