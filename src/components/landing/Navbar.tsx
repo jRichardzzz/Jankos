@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 const navLinks = [
-  { href: "#youtube-agent", label: "Youtube Agent IA" },
+  { href: "#agents", label: "Youtube Agent IA" },
   { href: "#pricing", label: "Tarifs" },
   { href: "#faq", label: "FAQ" },
 ];
