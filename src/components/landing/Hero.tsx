@@ -90,7 +90,7 @@ function AnimatedGridBackground() {
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-24 pb-8">
+    <section className="relative min-h-[85vh] sm:min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20 sm:pt-24 pb-4 sm:pb-8">
       
       {/* Quadrillage animé en arrière-plan */}
       <AnimatedGridBackground />
@@ -123,7 +123,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex items-center justify-center mb-6 sm:mb-4 -mt-28 sm:mt-0"
+          className="flex items-center justify-center mb-4 sm:mb-4 -mt-36 sm:mt-0"
         >
           <AnimatedTooltip items={agents} />
         </motion.div>
