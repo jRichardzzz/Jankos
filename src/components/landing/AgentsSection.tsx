@@ -41,7 +41,7 @@ function AgentCard({ image, category, name, description, href, color, glowColor,
         group
         relative
         flex flex-col
-        rounded-3xl
+        rounded-2xl sm:rounded-3xl
         bg-white/[0.05]
         backdrop-blur-xl
         border border-white/[0.1]
@@ -61,29 +61,30 @@ function AgentCard({ image, category, name, description, href, color, glowColor,
       {/* Gradient top accent */}
       <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${color}`} />
       
-      {/* Zone Image - cadré jusqu'au nombril, fond transparent */}
-      <div className="relative aspect-[3/4] overflow-hidden">
+      {/* Zone Image - Plus petite sur mobile */}
+      <div className="relative aspect-square sm:aspect-[3/4] overflow-hidden">
         <Image
           src={image}
           alt={name}
           fill
-          className="object-contain object-center transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-contain object-center"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
+          loading="lazy"
         />
       </div>
 
       {/* Contenu texte */}
-      <div className="flex flex-col flex-1 p-6">
+      <div className="flex flex-col flex-1 p-4 sm:p-6">
         {/* Catégorie avec couleur */}
-        <span className={`text-sm font-medium mb-1 bg-gradient-to-r ${color} bg-clip-text text-transparent`}>
+        <span className={`text-xs sm:text-sm font-medium mb-1 bg-gradient-to-r ${color} bg-clip-text text-transparent`}>
           {category}
         </span>
         
         {/* Nom de l'agent */}
-        <h3 className="text-2xl font-bold text-white mb-3">{name}</h3>
+        <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3">{name}</h3>
         
         {/* Description */}
-        <p className="text-gray-400 text-sm leading-relaxed flex-1 line-clamp-3">
+        <p className="text-gray-400 text-xs sm:text-sm leading-relaxed flex-1 line-clamp-2 sm:line-clamp-3">
           {description}
         </p>
 
@@ -91,12 +92,12 @@ function AgentCard({ image, category, name, description, href, color, glowColor,
         <Link
           href={href}
           className={`
-            mt-6
+            mt-4 sm:mt-6
             flex items-center justify-center gap-2
-            w-full py-3.5
+            w-full py-2.5 sm:py-3.5
             rounded-xl
             bg-gradient-to-r ${color}
-            text-white text-sm font-semibold
+            text-white text-xs sm:text-sm font-semibold
             transition-all duration-300
             opacity-90 hover:opacity-100
             hover:scale-[1.02]
@@ -173,8 +174,8 @@ export function AgentsSection() {
           </p>
         </motion.div>
 
-        {/* Grille des 3 agents */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        {/* Grille des 3 agents - 2 colonnes sur mobile */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8 max-w-5xl mx-auto px-2 sm:px-0">
           {agents.map((agent, index) => (
             <AgentCard
               key={agent.name}

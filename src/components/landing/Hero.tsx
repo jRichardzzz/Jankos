@@ -238,26 +238,26 @@ export function Hero() {
           </Link>
         </motion.div>
 
-        {/* Stats */}
+        {/* Stats - Remonté sur mobile */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.8 }}
-          className="mt-16 flex flex-wrap justify-center gap-8 sm:gap-12 text-sm"
+          className="mt-8 sm:mt-16 flex flex-wrap justify-center gap-6 sm:gap-12 text-sm"
         >
           <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-bold text-white">287+</span>
-            <span className="text-gray-500">Créateurs actifs</span>
+            <span className="text-xl sm:text-3xl font-bold text-white">287+</span>
+            <span className="text-gray-500 text-xs sm:text-sm">Créateurs actifs</span>
           </div>
-          <div className="w-px h-12 bg-white/10 hidden sm:block" />
+          <div className="w-px h-10 sm:h-12 bg-white/10" />
           <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-bold text-white">1,200+</span>
-            <span className="text-gray-500">Miniatures générées</span>
+            <span className="text-xl sm:text-3xl font-bold text-white">1,200+</span>
+            <span className="text-gray-500 text-xs sm:text-sm">Miniatures générées</span>
           </div>
-          <div className="w-px h-12 bg-white/10 hidden sm:block" />
+          <div className="w-px h-10 sm:h-12 bg-white/10" />
           <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-bold text-gradient">x2</span>
-            <span className="text-gray-500">CTR moyen</span>
+            <span className="text-xl sm:text-3xl font-bold text-gradient">x2</span>
+            <span className="text-gray-500 text-xs sm:text-sm">CTR moyen</span>
           </div>
         </motion.div>
       </div>

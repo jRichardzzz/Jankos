@@ -21,29 +21,30 @@ export default function DouglasPage() {
     <div className="min-h-screen bg-[hsl(224,71%,4%)] text-white">
       {/* Header */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[hsl(224,71%,4%)]/80 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-amber-500/30 flex items-center justify-center">
               <span className="text-amber-500 font-bold">J</span>
             </div>
-            <span className="font-bold text-white">JANKOS<span className="text-amber-500">.cc</span></span>
+            <span className="font-bold text-white text-sm sm:text-base">JANKOS<span className="text-amber-500">.cc</span></span>
           </Link>
           <Link
             href="/"
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-medium transition-colors"
+            className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-xs sm:text-sm font-medium transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Retour à l&apos;accueil
+            <span className="hidden sm:inline">Retour à l&apos;accueil</span>
+            <span className="sm:hidden">Retour</span>
           </Link>
         </div>
       </nav>
 
       {/* Main Content */}
-      <div className="pt-24 pb-20 px-6">
+      <div className="pt-20 sm:pt-24 pb-12 sm:pb-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center">
             
             {/* Left Column - Info */}
             <motion.div
@@ -56,39 +57,36 @@ export default function DouglasPage() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl bg-gradient-to-r from-violet-500/20 via-indigo-500/10 to-violet-500/20 border border-violet-500/30 backdrop-blur-sm mb-6 relative overflow-hidden group"
+                className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-2xl bg-gradient-to-r from-violet-500/20 via-indigo-500/10 to-violet-500/20 border border-violet-500/30 backdrop-blur-sm mb-4 sm:mb-6 relative overflow-hidden group"
               >
-                {/* Shimmer effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                
                 {/* Icon */}
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-violet-500/30">
-                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-violet-500/30">
+                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                   </svg>
                 </div>
                 
                 <div className="flex flex-col">
-                  <span className="text-white text-sm font-semibold">Viral Market Fit</span>
-                  <span className="text-violet-300/70 text-xs">10 crédits par génération</span>
+                  <span className="text-white text-xs sm:text-sm font-semibold">Viral Market Fit</span>
+                  <span className="text-violet-300/70 text-[10px] sm:text-xs">10 crédits par génération</span>
                 </div>
               </motion.div>
 
               {/* Title */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+              <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
                 <span className="text-white">Rencontrez </span>
                 <span className="bg-gradient-to-r from-violet-400 to-indigo-500 bg-clip-text text-transparent">Douglas</span>
               </h1>
 
               {/* Description */}
-              <p className="text-gray-400 text-lg leading-relaxed mb-8">
+              <p className="text-gray-400 text-base sm:text-lg leading-relaxed mb-6 sm:mb-8">
                 Douglas est votre stratège en idées virales. Il analyse les tendances actuelles 
                 et génère des concepts de vidéos adaptés à votre niche. Fini le syndrome de la 
                 page blanche, Douglas vous propose des idées qui ont fait leurs preuves.
               </p>
 
               {/* Features List */}
-              <ul className="space-y-4 mb-10">
+              <ul className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
                 {features.map((feature, index) => (
                   <motion.li
                     key={feature}

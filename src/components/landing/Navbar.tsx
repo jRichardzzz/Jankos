@@ -50,15 +50,10 @@ export function Navbar() {
           `}
         >
           {/* Logo Jankos.cc - Gauche */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex items-center"
-          >
-            <Link href="/" className="flex items-center gap-3 group">
-              {/* Icône logo avec J luxueux */}
-              <div className="relative w-10 h-10 rounded-xl bg-neutral-900 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-black/50 group-hover:border-amber-500/50 transition-all duration-300 overflow-hidden">
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+              {/* Icône logo avec J luxueux - Plus gros sur mobile */}
+              <div className="relative w-11 h-11 sm:w-10 sm:h-10 rounded-xl bg-neutral-900 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-black/50 group-hover:border-amber-500/50 transition-all duration-300 overflow-hidden">
                 {/* Lettre J luxueuse en SVG avec dégradé */}
                 <svg viewBox="0 0 24 24" className="w-7 h-7 z-10" fill="none">
                   <defs>
@@ -81,46 +76,17 @@ export function Navbar() {
                 <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-orange-500/5 opacity-50" />
               </div>
               
-              {/* Texte avec dégradé */}
-              <div className="hidden sm:flex items-baseline gap-0">
-                <span className="text-[22px] font-extrabold bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent tracking-tight">
+              {/* Texte avec dégradé - Visible sur mobile aussi */}
+              <div className="flex items-baseline gap-0">
+                <span className="text-lg sm:text-[22px] font-extrabold bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent tracking-tight">
                   JANKOS
                 </span>
-                <span className="text-[22px] font-extrabold bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 bg-clip-text text-transparent">
+                <span className="text-lg sm:text-[22px] font-extrabold bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 bg-clip-text text-transparent">
                   .cc
                 </span>
               </div>
             </Link>
-          </motion.div>
-
-          {/* Menu burger - Mobile uniquement */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="
-              md:hidden
-              flex items-center justify-center
-              w-10 h-10
-              rounded-full
-              border border-white/10
-              bg-black/70
-              backdrop-blur-2xl
-              shadow-lg shadow-black/30
-            "
-          >
-            <svg
-              className="w-5 h-5 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+          </div>
 
           {/* Menu centré - Desktop uniquement */}
           <div
@@ -161,7 +127,7 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Espace vide pour centrer le menu sur mobile */}
+          {/* Espace vide pour centrer le menu sur desktop */}
           <div className="hidden md:block w-10" />
 
           {/* Boutons auth - Desktop */}
@@ -231,22 +197,34 @@ export function Navbar() {
             </Link>
           </motion.div>
 
-          {/* Bouton Inscription - Mobile uniquement */}
-          <Link
-            href="/signup"
+          {/* Menu burger - Mobile uniquement (à droite) */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="
               md:hidden
-              relative group
-              px-4 py-2
-              text-sm font-semibold
-              text-white
+              flex items-center justify-center
+              w-11 h-11
               rounded-full
-              overflow-hidden
+              border border-white/10
+              bg-black/70
+              backdrop-blur-2xl
+              shadow-lg shadow-black/30
             "
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500" />
-            <span className="relative z-10">Inscription</span>
-          </Link>
+            <svg
+              className="w-5 h-5 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              {isMobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </nav>
       </motion.header>
 

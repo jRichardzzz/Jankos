@@ -34,41 +34,42 @@ const row2 = [...[...thumbnails].reverse(), ...[...thumbnails].reverse()];
 
 export function ThumbnailsScroll() {
   return (
-    <section className="py-8 relative overflow-hidden">
+    <section className="py-4 sm:py-8 relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-500/[0.02] to-transparent" />
       
       <div className="relative">
         {/* Masque de fondu sur les côtés */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0b] to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0b] to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-32 bg-gradient-to-r from-[#0a0a0b] to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-32 bg-gradient-to-l from-[#0a0a0b] to-transparent z-10 pointer-events-none" />
         
         {/* Rangée 1 - Défile vers la droite */}
-        <div className="mb-4 overflow-hidden">
+        <div className="mb-3 sm:mb-4 overflow-hidden">
           <motion.div
-            className="flex gap-4"
+            className="flex gap-3 sm:gap-4 will-change-transform"
             animate={{ x: [0, -3040] }}
             transition={{
               x: {
-                duration: 40,
+                duration: 60,
                 repeat: Infinity,
                 ease: "linear",
               },
             }}
+            style={{ transform: "translateZ(0)" }}
           >
             {row1.map((thumbnail, index) => (
               <div
                 key={`row1-${index}`}
-                className="relative flex-shrink-0 w-72 h-40 rounded-2xl overflow-hidden shadow-xl shadow-black/30 border border-white/10 group"
+                className="relative flex-shrink-0 w-48 h-28 sm:w-72 sm:h-40 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl shadow-black/30 border border-white/10"
               >
                 <Image
                   src={thumbnail}
                   alt={`Miniature ${index + 1}`}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="object-cover"
+                  sizes="(max-width: 640px) 192px, 288px"
+                  loading="lazy"
                 />
-                {/* Overlay au hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             ))}
           </motion.div>
@@ -77,36 +78,37 @@ export function ThumbnailsScroll() {
         {/* Rangée 2 - Défile vers la gauche */}
         <div className="overflow-hidden">
           <motion.div
-            className="flex gap-4"
+            className="flex gap-3 sm:gap-4 will-change-transform"
             animate={{ x: [-3040, 0] }}
             transition={{
               x: {
-                duration: 40,
+                duration: 60,
                 repeat: Infinity,
                 ease: "linear",
               },
             }}
+            style={{ transform: "translateZ(0)" }}
           >
             {row2.map((thumbnail, index) => (
               <div
                 key={`row2-${index}`}
-                className="relative flex-shrink-0 w-72 h-40 rounded-2xl overflow-hidden shadow-xl shadow-black/30 border border-white/10 group"
+                className="relative flex-shrink-0 w-48 h-28 sm:w-72 sm:h-40 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl shadow-black/30 border border-white/10"
               >
                 <Image
                   src={thumbnail}
                   alt={`Miniature ${index + 1}`}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="object-cover"
+                  sizes="(max-width: 640px) 192px, 288px"
+                  loading="lazy"
                 />
-                {/* Overlay au hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             ))}
           </motion.div>
         </div>
 
         {/* Caption */}
-        <p className="text-center text-gray-500 text-sm mt-6">
+        <p className="text-center text-gray-500 text-xs sm:text-sm mt-4 sm:mt-6 px-4">
           Générées par <span className="text-pink-400 font-medium">Alice</span> : agent créateur de miniatures haut CTR
         </p>
       </div>
