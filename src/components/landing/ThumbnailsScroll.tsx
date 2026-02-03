@@ -41,7 +41,7 @@ const thumbnailsDesktop: StaticImageData[] = [
 
 export function ThumbnailsScroll() {
   return (
-    <section className="-mt-[8.5rem] sm:mt-0 pb-4 sm:py-8 relative overflow-hidden">
+    <section className="-mt-24 sm:mt-0 pb-4 sm:py-8 relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-500/[0.02] to-transparent" />
       
