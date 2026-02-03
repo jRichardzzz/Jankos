@@ -123,7 +123,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex items-center justify-center mb-6 sm:mb-4 -mt-16 sm:mt-0"
+          className="flex items-center justify-center mb-6 sm:mb-4 -mt-20 sm:mt-0"
         >
           <AnimatedTooltip items={agents} />
         </motion.div>
@@ -153,22 +153,30 @@ export function Hero() {
             <span className="block text-white">Des agents créatifs surpuissants</span>
             <span className="block mt-2 text-gradient">pour dominer YouTube.</span>
           </span>
-          {/* Ligne ondulée style "Viral recipe" sous le titre */}
-          <span className="block mx-auto mt-3 sm:mt-4 w-48 sm:w-64">
-            <svg viewBox="0 0 200 12" className="w-full h-auto" preserveAspectRatio="none">
+          {/* Ligne ondulée style "Viral recipe" avec glow */}
+          <span className="block mx-auto mt-3 sm:mt-4 w-56 sm:w-72">
+            <svg viewBox="0 0 200 20" className="w-full h-auto overflow-visible" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#f59e0b" />
-                  <stop offset="50%" stopColor="#fbbf24" />
+                  <stop offset="40%" stopColor="#fbbf24" />
                   <stop offset="100%" stopColor="#06b6d4" />
                 </linearGradient>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
               </defs>
               <path
-                d="M0,6 Q10,2 20,6 T40,6 T60,6 T80,6 T100,6 T120,6 T140,6 T160,6 T180,6 T200,6"
+                d="M0,10 C20,4 30,16 50,10 C70,4 80,16 100,10 C120,4 130,16 150,10 C170,4 180,16 200,10"
                 fill="none"
                 stroke="url(#waveGradient)"
                 strokeWidth="3"
                 strokeLinecap="round"
+                filter="url(#glow)"
               />
             </svg>
           </span>
@@ -263,7 +271,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.8 }}
-          className="mt-4 sm:mt-16 flex flex-wrap justify-center gap-4 sm:gap-12 text-sm"
+          className="mt-3 sm:mt-16 flex flex-wrap justify-center gap-4 sm:gap-12 text-sm"
         >
           <div className="flex flex-col items-center">
             <span className="text-lg sm:text-3xl font-bold text-white">287+</span>
