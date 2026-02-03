@@ -102,7 +102,7 @@ export default function AlicePage() {
                 {/* Icon */}
                 <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg shadow-pink-500/30">
                   <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
                 
@@ -124,6 +124,21 @@ export default function AlicePage() {
                 professionnels qui captent l&apos;attention et boostent votre taux de clic. 
                 Décrivez simplement ce que vous voulez, et Alice s&apos;occupe du reste.
               </p>
+
+              {/* VIDEO - Mobile Only (juste après la description) */}
+              <div className="lg:hidden mb-8">
+                <div className="relative rounded-2xl overflow-hidden border border-pink-500/20">
+                  <video
+                    className="aspect-video w-full object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  >
+                    <source src="/alice-demo.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
 
               {/* Features List */}
               <ul className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
@@ -164,26 +179,14 @@ export default function AlicePage() {
                   </svg>
                 </button>
               </div>
-
-              {/* Agent Image - Mobile */}
-              <div className="lg:hidden mt-12 flex justify-center">
-                <div className="relative w-64 h-80">
-                  <Image
-                    src={AliceImage}
-                    alt="Alice"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              </div>
             </motion.div>
 
-            {/* Right Column - Video */}
+            {/* Right Column - Video (Desktop Only) */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
+              className="relative hidden lg:block"
             >
               {/* Video Container with Rotating Glow */}
               <div className="relative p-[3px] rounded-2xl">
@@ -228,7 +231,7 @@ export default function AlicePage() {
               </div>
 
               {/* Agent Image - Desktop (floating) */}
-              <div className="hidden lg:block absolute -bottom-10 -left-20 w-48 h-60 z-10">
+              <div className="absolute -bottom-10 -left-20 w-48 h-60 z-10">
                 <Image
                   src={AliceImage}
                   alt="Alice"

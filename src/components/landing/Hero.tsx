@@ -118,12 +118,12 @@ export function Hero() {
       {/* Contenu */}
       <div className="relative z-10 container-custom flex flex-col items-center text-center max-w-4xl">
         
-        {/* 3 avatars avec tooltip animé */}
+        {/* 3 avatars avec tooltip animé - plus haut sur mobile */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex items-center justify-center mb-4"
+          className="flex items-center justify-center mb-6 sm:mb-4 -mt-4 sm:mt-0"
         >
           <AnimatedTooltip items={agents} />
         </motion.div>
@@ -134,14 +134,17 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="
-            text-4xl sm:text-5xl md:text-6xl lg:text-7xl
+            text-3xl sm:text-5xl md:text-6xl lg:text-7xl
             font-bold tracking-tight
-            leading-[1.1]
-            mb-6
+            leading-[1.15]
+            mb-4 sm:mb-6
+            px-2 sm:px-0
           "
         >
           <span className="block text-white">Des agents créatifs surpuissants</span>
           <span className="block mt-2 text-gradient">pour dominer YouTube.</span>
+          {/* Ligne design sous le titre */}
+          <span className="block mx-auto mt-4 w-24 sm:w-32 h-1 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500" />
         </motion.h1>
 
         {/* Sous-titre */}

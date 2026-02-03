@@ -74,7 +74,7 @@ function AvatarCard({
 
       {/* Conteneur avec bordure colorée - Cercle */}
       <div 
-        className="relative p-[3px] rounded-full transition-all duration-300"
+        className="relative p-[2px] sm:p-[3px] rounded-full transition-all duration-300"
         style={{
           background: isHovered 
             ? `linear-gradient(135deg, ${colors.border}, transparent, ${colors.border})`
@@ -83,10 +83,10 @@ function AvatarCard({
         }}
       >
         {/* Fond noir */}
-        <div className="absolute inset-[3px] bg-neutral-900 rounded-full" />
+        <div className="absolute inset-[2px] sm:inset-[3px] bg-neutral-900 rounded-full" />
         
-        {/* Avatar - Cercle plus grand pour voir le torse */}
-        <div className="relative w-28 h-28 rounded-full overflow-hidden">
+        {/* Avatar - Plus petit sur mobile */}
+        <div className="relative w-16 h-16 sm:w-28 sm:h-28 rounded-full overflow-hidden">
           <Image
             src={item.image}
             alt={item.name}
@@ -109,7 +109,7 @@ export function AnimatedTooltip({ items }: AnimatedTooltipProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-2 sm:gap-3">
       {items.map((item) => (
         <AvatarCard
           key={item.id}
