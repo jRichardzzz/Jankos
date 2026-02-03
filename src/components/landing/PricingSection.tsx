@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const pricingPlans = [
   {
@@ -50,14 +50,18 @@ const pricingPlans = [
     buttonText: "Commencer",
     features: [
       { category: "Agents IA", items: ["Génération de miniatures", "Recherche d'idées", "Stratégie SEO"] },
-      { category: "Avantages", items: ["Crédits renouvelés chaque mois", "Support prioritaire"] },
+      { category: "Avantages", items: ["Génération privée", "2 sièges"] },
     ],
+    tooltips: {
+      "Génération privée": "Vos miniatures restent confidentielles et ne sont jamais utilisées à des fins marketing ou promotionnelles.",
+      "2 sièges": "Vous pouvez ajouter un autre membre de votre équipe à votre compte.",
+    },
     popular: true,
     icon: "⚡",
   },
   {
     name: "Volume+",
-    subtitle: "Pour les gros volumes",
+    showDynamicCredits: true,
     isMonthly: true,
     creditOptions: [
       { credits: 10000, price: 990 },
@@ -70,9 +74,13 @@ const pricingPlans = [
     ],
     buttonText: "Commencer",
     features: [
-      { category: "Tout dans Pro, plus", items: [] },
-      { category: "Volume personnalisé", items: ["Vitesse et flexibilité maximales", "Support prioritaire dédié", "Accès aux nouvelles fonctionnalités en avant-première"] },
+      { category: "Agents IA", items: ["Génération de miniatures", "Recherche d'idées", "Stratégie SEO"] },
+      { category: "Avantages", items: ["Génération privée", "5 sièges"] },
     ],
+    tooltips: {
+      "Génération privée": "Vos miniatures restent confidentielles et ne sont jamais utilisées à des fins marketing ou promotionnelles.",
+      "5 sièges": "Vous pouvez ajouter quatre autres membres de votre équipe à votre compte.",
+    },
     popular: false,
     icon: "🏢",
   },
@@ -85,6 +93,7 @@ export function PricingSection() {
     "Volume+": 0,
   });
   const [isAnnual, setIsAnnual] = useState(true);
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
 
   return (
     <section id="pricing" className="py-12 sm:py-16 relative overflow-hidden" suppressHydrationWarning>
@@ -345,14 +354,41 @@ export function PricingSection() {
                           {feature.category}
                         </h4>
                         <ul className="space-y-2">
-                          {feature.items.map((item, j) => (
-                            <li key={j} className="text-sm text-gray-600 flex items-start gap-2">
-                              <svg className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                              </svg>
-                              {item}
-                            </li>
-                          ))}
+                          {feature.items.map((item, j) => {
+                            const tooltipKey = `${plan.name}-${item}`;
+                            const hasTooltip = plan.tooltips && plan.tooltips[item];
+                            return (
+                              <li key={j} className="text-sm text-gray-600 flex items-start gap-2 relative">
+                                <svg className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                                <span className="flex items-center gap-1.5">
+                                  {item}
+                                  {hasTooltip && (
+                                    <button
+                                      onClick={() => setActiveTooltip(activeTooltip === tooltipKey ? null : tooltipKey)}
+                                      className="w-4 h-4 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-500 text-xs flex items-center justify-center transition-colors"
+                                    >
+                                      ?
+                                    </button>
+                                  )}
+                                </span>
+                                <AnimatePresence>
+                                  {hasTooltip && activeTooltip === tooltipKey && (
+                                    <motion.div
+                                      initial={{ opacity: 0, y: -5 }}
+                                      animate={{ opacity: 1, y: 0 }}
+                                      exit={{ opacity: 0, y: -5 }}
+                                      className="absolute left-0 top-full mt-1 z-50 bg-gray-900 text-white text-xs p-3 rounded-lg shadow-lg max-w-[200px]"
+                                    >
+                                      {plan.tooltips[item]}
+                                      <div className="absolute -top-1 left-4 w-2 h-2 bg-gray-900 rotate-45" />
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     ))}
