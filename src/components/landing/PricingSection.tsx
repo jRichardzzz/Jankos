@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const pricingPlans = [
   {
-    name: "Pay-as-you-go",
+    name: "À la carte",
     description: "Commencez petit avec un achat unique, évoluez selon vos besoins. Rechargez vos crédits à tout moment.\n\n1 miniature = 10 crédits",
     creditOptions: [
       { credits: 30, price: 8.90 },
@@ -88,7 +88,7 @@ const pricingPlans = [
 
 export function PricingSection() {
   const [selectedCredits, setSelectedCredits] = useState<{ [key: string]: number }>({
-    "Pay-as-you-go": 0,
+    "À la carte": 0,
     "Pro": 0,
     "Volume+": 0,
   });
