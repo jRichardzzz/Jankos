@@ -60,14 +60,14 @@ export function ThumbnailsScroll() {
             {row1.map((thumbnail, index) => (
               <div
                 key={`row1-${index}`}
-                className="relative flex-shrink-0 w-48 h-28 sm:w-72 sm:h-40 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl shadow-black/30 border border-white/10"
+                className="relative flex-shrink-0 w-36 h-20 sm:w-72 sm:h-40 rounded-lg sm:rounded-2xl overflow-hidden shadow-lg shadow-black/30 border border-white/10"
               >
                 <Image
                   src={thumbnail}
                   alt={`Miniature ${index + 1}`}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 640px) 192px, 288px"
+                  sizes="(max-width: 640px) 144px, 288px"
                   loading="lazy"
                 />
               </div>
@@ -92,14 +92,14 @@ export function ThumbnailsScroll() {
             {row2.map((thumbnail, index) => (
               <div
                 key={`row2-${index}`}
-                className="relative flex-shrink-0 w-48 h-28 sm:w-72 sm:h-40 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl shadow-black/30 border border-white/10"
+                className="relative flex-shrink-0 w-36 h-20 sm:w-72 sm:h-40 rounded-lg sm:rounded-2xl overflow-hidden shadow-lg shadow-black/30 border border-white/10"
               >
                 <Image
                   src={thumbnail}
                   alt={`Miniature ${index + 1}`}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 640px) 192px, 288px"
+                  sizes="(max-width: 640px) 144px, 288px"
                   loading="lazy"
                 />
               </div>

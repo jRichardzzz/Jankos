@@ -173,19 +173,19 @@ export function Hero() {
           <span className="block mt-2 text-white font-medium">Tout en un seul outil.</span>
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* CTA Buttons - Côte à côte sur mobile */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex flex-col sm:flex-row items-center gap-4"
+          className="flex flex-row items-center gap-3 sm:gap-4"
         >
           {/* Bouton Principal */}
           <Link
             href="/signup"
             className="
               relative group
-              px-8 py-4 text-base font-semibold
+              px-5 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold
               text-white
               rounded-xl
               overflow-hidden
@@ -204,13 +204,13 @@ export function Hero() {
             
             {/* Glow */}
             <div 
-              className="absolute inset-0 opacity-50 group-hover:opacity-100 transition-opacity duration-300"
+              className="absolute inset-0 opacity-50 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block"
               style={{
                 boxShadow: "0 0 30px 5px rgba(139, 92, 246, 0.3)",
               }}
             />
             
-            <span className="relative z-10 flex items-center gap-2">
+            <span className="relative z-10 flex items-center gap-1.5 sm:gap-2">
               Commencer
               <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -222,19 +222,20 @@ export function Hero() {
           <Link
             href="#agents"
             className="
-              px-8 py-4 text-base font-medium
+              px-4 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-medium
               text-gray-300 hover:text-white
               rounded-xl
               border border-white/10 hover:border-white/20
               bg-white/5 hover:bg-white/10
               transition-all duration-300
-              flex items-center gap-2
+              flex items-center gap-1.5 sm:gap-2
             "
           >
-            <svg className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z"/>
             </svg>
-            Voir les agents
+            <span className="hidden sm:inline">Voir les agents</span>
+            <span className="sm:hidden">Agents</span>
           </Link>
         </motion.div>
 
