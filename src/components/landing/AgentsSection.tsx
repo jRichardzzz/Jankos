@@ -190,7 +190,7 @@ export function AgentsSection() {
               lg:hidden
               relative
               flex flex-col
-              rounded-2xl
+              rounded-2xl sm:rounded-3xl
               bg-white/[0.03]
               border border-white/[0.08]
               overflow-hidden
@@ -199,35 +199,35 @@ export function AgentsSection() {
             {/* Gradient top accent */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-yellow-500" />
             
-            {/* Badge "À venir" - REDESIGN propre */}
+            {/* Badge "Bientôt" */}
             <div className="absolute top-2 right-2 z-20">
               <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-gradient-to-r from-amber-500 to-yellow-500 text-black shadow-lg shadow-amber-500/20">
-                Soon
+                Bientôt
               </span>
             </div>
             
-            {/* Zone Image placeholder - simplifié */}
-            <div className="relative aspect-square overflow-hidden flex items-center justify-center bg-gradient-to-br from-amber-500/5 to-yellow-500/5">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500/30 to-yellow-500/30 flex items-center justify-center">
-                <svg className="w-8 h-8 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            {/* Zone Image placeholder */}
+            <div className="relative aspect-square sm:aspect-[3/4] overflow-hidden flex items-center justify-center bg-gradient-to-br from-amber-500/5 to-yellow-500/5">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-amber-500/20 to-yellow-500/20 flex items-center justify-center">
+                <svg className="w-12 h-12 text-amber-500/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                 </svg>
               </div>
             </div>
 
-            {/* Contenu texte - simplifié */}
-            <div className="flex flex-col flex-1 p-3">
-              <span className="text-[10px] font-medium mb-0.5 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
+            {/* Contenu texte */}
+            <div className="flex flex-col flex-1 p-4 sm:p-6">
+              <span className="text-xs sm:text-sm font-medium mb-1 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
                 Rédactrice de Scripts
               </span>
-              <h3 className="text-base font-bold text-white/80 mb-1">Lou</h3>
-              <p className="text-gray-500 text-[10px] leading-relaxed flex-1 line-clamp-2">
-                Scripts YouTube viraux et captivants.
+              <h3 className="text-xl sm:text-2xl font-bold text-white/70 mb-2 sm:mb-3">Lou</h3>
+              <p className="text-gray-400 text-xs sm:text-sm leading-relaxed flex-1 line-clamp-2 sm:line-clamp-3">
+                Rédige des scripts YouTube viraux et captivants pour vos vidéos.
               </p>
 
-              {/* Bouton désactivé - plus compact */}
-              <div className="mt-3 flex items-center justify-center w-full py-2 rounded-lg bg-white/5 text-white/40 text-[10px] font-medium">
-                Bientôt
+              {/* Bouton désactivé */}
+              <div className="mt-4 sm:mt-6 flex items-center justify-center gap-2 w-full py-2.5 sm:py-3.5 rounded-xl bg-white/5 text-white/40 text-xs sm:text-sm font-semibold cursor-not-allowed">
+                Bientôt disponible
               </div>
             </div>
           </div>

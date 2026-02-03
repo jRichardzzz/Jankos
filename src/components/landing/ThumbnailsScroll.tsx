@@ -52,9 +52,9 @@ export function ThumbnailsScroll() {
         
         {/* Rangée 1 - Animation CSS pure (beaucoup plus performant que Framer Motion) */}
         <div className="mb-3 sm:mb-4 overflow-hidden">
-          {/* Version Mobile - moins d'images */}
+          {/* Version Mobile - sans doublons */}
           <div className="flex sm:hidden gap-3 animate-scroll-left">
-            {[...thumbnailsMobile, ...thumbnailsMobile].map((thumbnail, index) => (
+            {thumbnailsMobile.map((thumbnail, index) => (
               <div
                 key={`row1-mobile-${index}`}
                 className="relative flex-shrink-0 w-36 h-20 rounded-lg overflow-hidden shadow-lg shadow-black/30 border border-white/10"
@@ -65,7 +65,7 @@ export function ThumbnailsScroll() {
                   fill
                   className="object-cover"
                   sizes="144px"
-                  loading={index < 6 ? "eager" : "lazy"}
+                  loading="eager"
                   quality={60}
                   placeholder="blur"
                 />
@@ -96,9 +96,9 @@ export function ThumbnailsScroll() {
 
         {/* Rangée 2 - Animation CSS inverse */}
         <div className="overflow-hidden">
-          {/* Version Mobile */}
+          {/* Version Mobile - sans doublons */}
           <div className="flex sm:hidden gap-3 animate-scroll-right">
-            {[...thumbnailsMobile].reverse().concat([...thumbnailsMobile].reverse()).map((thumbnail, index) => (
+            {[...thumbnailsMobile].reverse().map((thumbnail, index) => (
               <div
                 key={`row2-mobile-${index}`}
                 className="relative flex-shrink-0 w-36 h-20 rounded-lg overflow-hidden shadow-lg shadow-black/30 border border-white/10"
