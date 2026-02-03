@@ -144,8 +144,8 @@ export function Hero() {
         >
           {/* Mobile : 3 lignes bien découpées */}
           <span className="sm:hidden">
-            <span className="block text-white">Des agents créatifs</span>
-            <span className="block text-white">surpuissants</span>
+            <span className="block text-white">Des agents</span>
+            <span className="block text-white">créatifs surpuissants</span>
             <span className="block mt-1 text-gradient">pour dominer YouTube.</span>
           </span>
           {/* Desktop : 2 lignes */}
