@@ -153,8 +153,25 @@ export function Hero() {
             <span className="block text-white">Des agents créatifs surpuissants</span>
             <span className="block mt-2 text-gradient">pour dominer YouTube.</span>
           </span>
-          {/* Ligne design sous le titre */}
-          <span className="block mx-auto mt-3 sm:mt-4 w-20 sm:w-32 h-1 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500" />
+          {/* Ligne ondulée style "Viral recipe" sous le titre */}
+          <span className="block mx-auto mt-3 sm:mt-4 w-48 sm:w-64">
+            <svg viewBox="0 0 200 12" className="w-full h-auto" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#f59e0b" />
+                  <stop offset="50%" stopColor="#fbbf24" />
+                  <stop offset="100%" stopColor="#06b6d4" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M0,6 Q10,2 20,6 T40,6 T60,6 T80,6 T100,6 T120,6 T140,6 T160,6 T180,6 T200,6"
+                fill="none"
+                stroke="url(#waveGradient)"
+                strokeWidth="3"
+                strokeLinecap="round"
+              />
+            </svg>
+          </span>
         </motion.h1>
 
         {/* Sous-titre */}
