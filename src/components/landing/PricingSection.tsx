@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const pricingPlans = [
   {
     name: "Pay-as-you-go",
-    description: "Commencez petit avec un achat unique — évoluez selon vos besoins. Rechargez vos crédits à tout moment.\n\n1 miniature = 10 crédits",
+    description: "Commencez petit avec un achat unique, évoluez selon vos besoins. Rechargez vos crédits à tout moment.\n\n1 miniature = 10 crédits",
     creditOptions: [
       { credits: 30, price: 8.90 },
       { credits: 100, price: 19.90 },
@@ -26,7 +26,8 @@ const pricingPlans = [
   },
   {
     name: "Lite",
-    subtitle: "15 miniatures par mois",
+    subtitle: "150 crédits par mois",
+    subtitleMiniatures: "15 miniatures",
     price: 19,
     priceAnnual: 16,
     buttonText: "Commencer",
@@ -192,16 +193,21 @@ export function PricingSection() {
                 
                 {/* Subtitle */}
                 {plan.subtitle && (
-                  <p className={`mb-5 flex items-center gap-2 ${plan.priceAnnual ? "text-base font-semibold text-gray-700" : "text-sm text-gray-500"}`}>
-                    {plan.priceAnnual && (
-                      <span className="w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      </span>
+                  <div className="mb-5">
+                    <p className={`flex items-center gap-2 ${plan.priceAnnual ? "text-base font-semibold text-gray-700" : "text-sm text-gray-500"}`}>
+                      {plan.priceAnnual && (
+                        <span className="w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        </span>
+                      )}
+                      {plan.subtitle}
+                    </p>
+                    {plan.subtitleMiniatures && (
+                      <p className="text-sm text-amber-600 font-medium mt-1">({plan.subtitleMiniatures})</p>
                     )}
-                    {plan.subtitle}
-                  </p>
+                  </div>
                 )}
 
                 {/* Credit selector */}
@@ -224,6 +230,9 @@ export function PricingSection() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
+                    <p className="text-sm text-amber-600 font-medium mt-2">
+                      ({Math.floor(plan.creditOptions[selectedCredits[plan.name] || 0].credits / 10).toLocaleString("fr-FR")} miniatures{plan.isMonthly ? " / mois" : ""})
+                    </p>
                   </div>
                 )}
 
