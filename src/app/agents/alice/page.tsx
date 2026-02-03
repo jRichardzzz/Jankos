@@ -39,7 +39,7 @@ const features = [
   "Personnalisation des acteurs et objets",
   "Jusqu'à 3 miniatures par génération",
   "Téléchargement HD instantané",
-  "Sauvegarde dans vos réalisations pendant 30 jours",
+  "Sauvegarde dans vos réalisations pendant 15 jours",
 ];
 
 export default function AlicePage() {

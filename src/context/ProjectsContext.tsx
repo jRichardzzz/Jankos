@@ -26,7 +26,7 @@ export interface Project {
   description: string;
   images: GeneratedImage[];
   createdAt: string;
-  expiresAt: string; // 30 jours après création
+  expiresAt: string; // 15 jours après création
   status: 'generating' | 'completed' | 'failed';
   creditsUsed: number;
 }

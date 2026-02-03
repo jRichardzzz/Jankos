@@ -94,7 +94,7 @@ export default function RealisationsPage() {
       >
         <h1 className="text-3xl font-bold text-gray-900">Mes Réalisations</h1>
         <p className="text-gray-500 mt-1">
-          Retrouvez toutes vos miniatures générées (disponibles pendant 30 jours)
+          Retrouvez toutes vos miniatures générées (disponibles pendant 15 jours)
         </p>
       </motion.div>
 
