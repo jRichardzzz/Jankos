@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const faqs = [
   {
     question: "Comment fonctionnent les crédits ?",
-    answer: "Chaque action consomme un certain nombre de crédits : générer une miniature (1 crédit), trouver des idées virales avec Douglas (1 crédit), générer une stratégie SEO avec Roman (2 crédits). Les crédits des abonnements se rechargent chaque mois. Les crédits achetés en Pay-as-you-go n'expirent jamais."
+    answer: "Chaque action consomme un certain nombre de crédits : générer une miniature (10 crédits), trouver des idées virales avec Douglas (10 crédits), générer une stratégie SEO avec Roman (20 crédits). Les crédits des abonnements se rechargent chaque mois. Les crédits achetés en Pay-as-you-go n'expirent jamais."
   },
   {
     question: "Puis-je annuler mon abonnement à tout moment ?",

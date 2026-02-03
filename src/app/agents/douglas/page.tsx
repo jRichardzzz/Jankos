@@ -70,7 +70,7 @@ export default function DouglasPage() {
                 
                 <div className="flex flex-col">
                   <span className="text-white text-sm font-semibold">Viral Market Fit</span>
-                  <span className="text-violet-300/70 text-xs">1 crédit par génération</span>
+                  <span className="text-violet-300/70 text-xs">10 crédits par génération</span>
                 </div>
               </motion.div>
 

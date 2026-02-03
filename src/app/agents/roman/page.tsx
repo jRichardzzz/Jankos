@@ -70,7 +70,7 @@ export default function RomanPage() {
                 
                 <div className="flex flex-col">
                   <span className="text-white text-sm font-semibold">Keyword Alchemist</span>
-                  <span className="text-teal-300/70 text-xs">2 crédits par génération</span>
+                  <span className="text-teal-300/70 text-xs">20 crédits par génération</span>
                 </div>
               </motion.div>
 

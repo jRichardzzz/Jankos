@@ -107,7 +107,7 @@ export default function AlicePage() {
                 
                 <div className="flex flex-col">
                   <span className="text-white text-sm font-semibold">Générateur de Miniatures</span>
-                  <span className="text-pink-300/70 text-xs">1 crédit par génération</span>
+                  <span className="text-pink-300/70 text-xs">10 crédits par génération</span>
                 </div>
               </motion.div>
 

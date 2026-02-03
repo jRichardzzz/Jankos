@@ -9,7 +9,7 @@ const jankosFeatures = [
   {
     icon: DollarSign,
     title: "10x moins cher",
-    description: "Une miniature pour seulement 1 crédit (~2€) au lieu de 20-50€ chez un freelance. Économisez sur chaque création sans compromis sur la qualité.",
+    description: "Une miniature pour seulement 10 crédits (~3€) au lieu de 20-50€ chez un freelance. Économisez sur chaque création sans compromis sur la qualité.",
   },
   {
     icon: Zap,

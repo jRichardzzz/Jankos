@@ -7,19 +7,19 @@ import { ArrowLeft, Zap, Check, CreditCard } from 'lucide-react';
 import { useCredits } from '@/context/CreditsContext';
 
 const creditPacks = [
-  { credits: 3, price: 8.90, popular: false },
-  { credits: 10, price: 19.90, popular: false },
-  { credits: 20, price: 39, popular: false },
-  { credits: 50, price: 95, popular: true },
-  { credits: 100, price: 179, popular: false },
-  { credits: 200, price: 330, popular: false },
+  { credits: 30, price: 8.90, popular: false },
+  { credits: 100, price: 19.90, popular: false },
+  { credits: 200, price: 39, popular: false },
+  { credits: 500, price: 95, popular: true },
+  { credits: 1000, price: 179, popular: false },
+  { credits: 2000, price: 330, popular: false },
 ];
 
 const subscriptionPlans = [
-  { credits: 50, price: 49, priceAnnual: 42 },
-  { credits: 100, price: 98, priceAnnual: 83 },
-  { credits: 200, price: 196, priceAnnual: 167 },
-  { credits: 500, price: 490, priceAnnual: 417 },
+  { credits: 500, price: 49, priceAnnual: 42 },
+  { credits: 1000, price: 98, priceAnnual: 83 },
+  { credits: 2000, price: 196, priceAnnual: 167 },
+  { credits: 5000, price: 490, priceAnnual: 417 },
 ];
 
 export default function CreditsPage() {
@@ -243,8 +243,8 @@ export default function CreditsPage() {
         <ul className="text-sm text-gray-600 space-y-1">
           <li>• <strong>Packs :</strong> Achat unique, crédits valables à vie</li>
           <li>• <strong>Abonnement :</strong> Crédits renouvelés chaque mois automatiquement</li>
-          <li>• <strong>1 crédit</strong> = 1 miniature ou 1 recherche d&apos;idées</li>
-          <li>• <strong>2 crédits</strong> = 1 stratégie SEO avec Roman</li>
+          <li>• <strong>10 crédits</strong> = 1 miniature ou 1 recherche d&apos;idées</li>
+          <li>• <strong>20 crédits</strong> = 1 stratégie SEO avec Roman</li>
         </ul>
       </div>
     </div>

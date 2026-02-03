@@ -135,8 +135,8 @@ export default function AlicePage() {
   const actorInputRef = useRef<HTMLInputElement>(null);
   const objectInputRef = useRef<HTMLInputElement>(null);
 
-  // Calculate required credits
-  const requiredCredits = settings.count;
+  // Calculate required credits (10 credits per thumbnail)
+  const requiredCredits = settings.count * 10;
 
   // Request generation - opens confirmation modal
   const handleRequestGenerate = () => {
@@ -243,9 +243,9 @@ export default function AlicePage() {
           const data = await response.json();
 
           if (!response.ok) {
-            // Erreur sur cette miniature, on rembourse 1 crédit et on continue
+            // Erreur sur cette miniature, on rembourse 10 crédits et on continue
             failedCount++;
-            await addCredits(1);
+            await addCredits(10);
             console.error(`Miniature ${i + 1} échouée:`, data.error);
             // Continue avec la suivante
             continue;
@@ -732,9 +732,9 @@ En arrière plan un chantier immobilier l'air délabré`}
                 onChange={(e) => setSettings({...settings, count: parseInt(e.target.value)})}
                 className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 text-gray-700 focus:border-amber-500 focus:outline-none"
               >
-                <option value={1}>1 miniature (1 crédit)</option>
-                <option value={2}>2 miniatures (2 crédits)</option>
-                <option value={3}>3 miniatures (3 crédits)</option>
+                <option value={1}>1 miniature (10 crédits)</option>
+                <option value={2}>2 miniatures (20 crédits)</option>
+                <option value={3}>3 miniatures (30 crédits)</option>
               </select>
             </div>
           </motion.div>

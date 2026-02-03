@@ -36,7 +36,7 @@ interface VideoConcept {
   potentiel_viral: string;
 }
 
-const CREDITS_COST = 2;
+const CREDITS_COST = 20;
 
 const SUGGESTED_NICHES = [
   "Badminton",

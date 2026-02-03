@@ -29,7 +29,7 @@ interface GroundingChunk {
   };
 }
 
-const CREDITS_COST = 1;
+const CREDITS_COST = 10;
 
 export default function DouglasPage() {
   const { credits, deductCredits, isHydrated } = useCredits();
