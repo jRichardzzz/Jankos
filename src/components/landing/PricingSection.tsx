@@ -200,7 +200,7 @@ export function PricingSection() {
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                       </span>
-                      {plan.creditOptions[selectedCredits[plan.name] || 0].credits.toLocaleString("fr-FR")} crédits / mois
+                      {plan.creditOptions[selectedCredits[plan.name] || 0].credits.toLocaleString("fr-FR")} crédits par mois
                     </p>
                     <p className="text-sm text-amber-600 font-medium mt-1">
                       ({Math.floor(plan.creditOptions[selectedCredits[plan.name] || 0].credits / 10).toLocaleString("fr-FR")} miniatures)
@@ -230,7 +230,9 @@ export function PricingSection() {
                 {/* Credit selector */}
                 {plan.creditOptions && (
                   <div className="mb-5">
-                    <label className="text-xs text-gray-500 mb-2 block font-medium uppercase tracking-wide">Quantité</label>
+                    {!plan.showDynamicCredits && (
+                      <label className="text-xs text-gray-500 mb-2 block font-medium uppercase tracking-wide">Quantité</label>
+                    )}
                     <div className="relative">
                       <select
                         value={selectedCredits[plan.name] || 0}
@@ -239,7 +241,10 @@ export function PricingSection() {
                       >
                         {plan.creditOptions.map((option, i) => (
                           <option key={i} value={i}>
-                            {option.credits.toLocaleString("fr-FR")} crédits{plan.isMonthly ? " / mois" : ""}
+                            {plan.showDynamicCredits 
+                              ? `${option.credits.toLocaleString("fr-FR")} crédits` 
+                              : `${option.credits.toLocaleString("fr-FR")} crédits${plan.isMonthly ? " / mois" : ""}`
+                            }
                           </option>
                         ))}
                       </select>
