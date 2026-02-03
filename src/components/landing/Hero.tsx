@@ -123,7 +123,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex items-center justify-center mb-4 sm:mb-4 -mt-24 sm:mt-0"
+          className="flex items-center justify-center mb-4 sm:mb-4 -mt-20 sm:mt-0"
         >
           <AnimatedTooltip items={agents} />
         </motion.div>
