@@ -23,10 +23,6 @@ const nextConfig = {
     minimumCacheTTL: 31536000, // 1 an de cache
   },
   
-  // Optimisations expérimentales pour la performance
-  experimental: {
-    optimizeCss: true, // Minifie le CSS
-  },
   
   webpack: (config, { dev, isServer }) => {
     // Obfuscation uniquement en production et côté client
