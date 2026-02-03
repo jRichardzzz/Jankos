@@ -118,12 +118,12 @@ export function Hero() {
       {/* Contenu */}
       <div className="relative z-10 container-custom flex flex-col items-center text-center max-w-4xl">
         
-        {/* 3 avatars avec tooltip animé - plus haut sur mobile */}
+        {/* 3 avatars avec tooltip animé - collé au header sur mobile */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex items-center justify-center mb-6 sm:mb-4 -mt-4 sm:mt-0"
+          className="flex items-center justify-center mb-6 sm:mb-4 -mt-16 sm:mt-0"
         >
           <AnimatedTooltip items={agents} />
         </motion.div>

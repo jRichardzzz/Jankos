@@ -85,8 +85,8 @@ function AvatarCard({
         {/* Fond noir */}
         <div className="absolute inset-[2px] sm:inset-[3px] bg-neutral-900 rounded-full" />
         
-        {/* Avatar - Plus petit sur mobile */}
-        <div className="relative w-16 h-16 sm:w-28 sm:h-28 rounded-full overflow-hidden">
+        {/* Avatar - 90px sur mobile, 112px sur desktop */}
+        <div className="relative w-[90px] h-[90px] sm:w-28 sm:h-28 rounded-full overflow-hidden">
           <Image
             src={item.image}
             alt={item.name}
