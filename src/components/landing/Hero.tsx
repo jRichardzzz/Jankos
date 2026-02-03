@@ -192,7 +192,7 @@ export function Hero() {
             text-gray-400
             max-w-2xl
             leading-relaxed
-            mb-10
+            mb-6 sm:mb-10
           "
         >
           Générez des miniatures haut CTR, découvrez des idées virales 
