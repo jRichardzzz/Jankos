@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image, { StaticImageData } from "next/image";
 
 // Import des miniatures
@@ -10,12 +9,24 @@ import MiniaMakeup from "../../MiniaMakeup.webp";
 import MiniaTech3 from "../../MiniaTech3.webp";
 import MiniaYacht from "../../MiniaYacht.webp";
 import MiniaBadminton from "../../Minia Badminton.webp";
+
+// Sur mobile on charge moins d'images pour la performance
+const thumbnailsMobile: StaticImageData[] = [
+  MiniaBatiment2,
+  MiniaLondres,
+  MiniaMakeup,
+  MiniaTech3,
+  MiniaYacht,
+  MiniaBadminton,
+];
+
+// Sur desktop on peut en avoir plus
 import MiniaImmo from "../../Minia Immo.webp";
 import Miniaacci from "../../Miniaacci.webp";
 import MiniaAgent from "../../MiniaAgent.webp";
 import MiniaJetSki from "../../Minia jet ski.webp";
 
-const thumbnails: StaticImageData[] = [
+const thumbnailsDesktop: StaticImageData[] = [
   MiniaBatiment2,
   MiniaLondres,
   MiniaMakeup,
@@ -28,10 +39,6 @@ const thumbnails: StaticImageData[] = [
   MiniaJetSki,
 ];
 
-// On duplique les miniatures pour créer un effet infini (2x suffit avec 10 images)
-const row1 = [...thumbnails, ...thumbnails];
-const row2 = [...[...thumbnails].reverse(), ...[...thumbnails].reverse()];
-
 export function ThumbnailsScroll() {
   return (
     <section className="py-4 sm:py-8 relative overflow-hidden">
@@ -43,68 +50,92 @@ export function ThumbnailsScroll() {
         <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-32 bg-gradient-to-r from-[#0a0a0b] to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-32 bg-gradient-to-l from-[#0a0a0b] to-transparent z-10 pointer-events-none" />
         
-        {/* Rangée 1 - Défile vers la droite */}
+        {/* Rangée 1 - Animation CSS pure (beaucoup plus performant que Framer Motion) */}
         <div className="mb-3 sm:mb-4 overflow-hidden">
-          <motion.div
-            className="flex gap-3 sm:gap-4 will-change-transform"
-            animate={{ x: [0, -3040] }}
-            transition={{
-              x: {
-                duration: 60,
-                repeat: Infinity,
-                ease: "linear",
-              },
-            }}
-            style={{ transform: "translateZ(0)" }}
-          >
-            {row1.map((thumbnail, index) => (
+          {/* Version Mobile - moins d'images */}
+          <div className="flex sm:hidden gap-3 animate-scroll-left">
+            {[...thumbnailsMobile, ...thumbnailsMobile].map((thumbnail, index) => (
               <div
-                key={`row1-${index}`}
-                className="relative flex-shrink-0 w-36 h-20 sm:w-72 sm:h-40 rounded-lg sm:rounded-2xl overflow-hidden shadow-lg shadow-black/30 border border-white/10"
+                key={`row1-mobile-${index}`}
+                className="relative flex-shrink-0 w-36 h-20 rounded-lg overflow-hidden shadow-lg shadow-black/30 border border-white/10"
               >
                 <Image
                   src={thumbnail}
                   alt={`Miniature ${index + 1}`}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 640px) 144px, 288px"
-                  loading="lazy"
+                  sizes="144px"
+                  loading={index < 6 ? "eager" : "lazy"}
+                  quality={60}
+                  placeholder="blur"
                 />
               </div>
             ))}
-          </motion.div>
+          </div>
+          {/* Version Desktop */}
+          <div className="hidden sm:flex gap-4 animate-scroll-left-desktop">
+            {[...thumbnailsDesktop, ...thumbnailsDesktop].map((thumbnail, index) => (
+              <div
+                key={`row1-desktop-${index}`}
+                className="relative flex-shrink-0 w-72 h-40 rounded-2xl overflow-hidden shadow-lg shadow-black/30 border border-white/10"
+              >
+                <Image
+                  src={thumbnail}
+                  alt={`Miniature ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="288px"
+                  loading={index < 10 ? "eager" : "lazy"}
+                  quality={75}
+                  placeholder="blur"
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Rangée 2 - Défile vers la gauche */}
+        {/* Rangée 2 - Animation CSS inverse */}
         <div className="overflow-hidden">
-          <motion.div
-            className="flex gap-3 sm:gap-4 will-change-transform"
-            animate={{ x: [-3040, 0] }}
-            transition={{
-              x: {
-                duration: 60,
-                repeat: Infinity,
-                ease: "linear",
-              },
-            }}
-            style={{ transform: "translateZ(0)" }}
-          >
-            {row2.map((thumbnail, index) => (
+          {/* Version Mobile */}
+          <div className="flex sm:hidden gap-3 animate-scroll-right">
+            {[...thumbnailsMobile].reverse().concat([...thumbnailsMobile].reverse()).map((thumbnail, index) => (
               <div
-                key={`row2-${index}`}
-                className="relative flex-shrink-0 w-36 h-20 sm:w-72 sm:h-40 rounded-lg sm:rounded-2xl overflow-hidden shadow-lg shadow-black/30 border border-white/10"
+                key={`row2-mobile-${index}`}
+                className="relative flex-shrink-0 w-36 h-20 rounded-lg overflow-hidden shadow-lg shadow-black/30 border border-white/10"
               >
                 <Image
                   src={thumbnail}
                   alt={`Miniature ${index + 1}`}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 640px) 144px, 288px"
+                  sizes="144px"
                   loading="lazy"
+                  quality={60}
+                  placeholder="blur"
                 />
               </div>
             ))}
-          </motion.div>
+          </div>
+          {/* Version Desktop */}
+          <div className="hidden sm:flex gap-4 animate-scroll-right-desktop">
+            {[...thumbnailsDesktop].reverse().concat([...thumbnailsDesktop].reverse()).map((thumbnail, index) => (
+              <div
+                key={`row2-desktop-${index}`}
+                className="relative flex-shrink-0 w-72 h-40 rounded-2xl overflow-hidden shadow-lg shadow-black/30 border border-white/10"
+              >
+                <Image
+                  src={thumbnail}
+                  alt={`Miniature ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="288px"
+                  loading="lazy"
+                  quality={75}
+                  placeholder="blur"
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Caption */}

@@ -185,55 +185,52 @@ export function AgentsSection() {
           ))}
           
           {/* Lou - 4ème agent uniquement sur mobile (à venir) */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-            transition={{ duration: 0.6, delay: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+          <div
             className="
               lg:hidden
               relative
               flex flex-col
               rounded-2xl
               bg-white/[0.03]
-              backdrop-blur-xl
               border border-white/[0.08]
               overflow-hidden
-              opacity-60
             "
           >
             {/* Gradient top accent */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-yellow-500" />
             
-            {/* Badge "À venir" */}
-            <div className="absolute top-3 right-3 z-20 px-2 py-1 rounded-full bg-amber-500/20 border border-amber-500/30">
-              <span className="text-[10px] font-semibold text-amber-400">À venir</span>
+            {/* Badge "À venir" - REDESIGN propre */}
+            <div className="absolute top-2 right-2 z-20">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-gradient-to-r from-amber-500 to-yellow-500 text-black shadow-lg shadow-amber-500/20">
+                Soon
+              </span>
             </div>
             
-            {/* Zone Image placeholder */}
+            {/* Zone Image placeholder - simplifié */}
             <div className="relative aspect-square overflow-hidden flex items-center justify-center bg-gradient-to-br from-amber-500/5 to-yellow-500/5">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-amber-500/20 to-yellow-500/20 flex items-center justify-center">
-                <svg className="w-12 h-12 text-amber-500/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500/30 to-yellow-500/30 flex items-center justify-center">
+                <svg className="w-8 h-8 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                 </svg>
               </div>
             </div>
 
-            {/* Contenu texte */}
-            <div className="flex flex-col flex-1 p-4">
-              <span className="text-xs font-medium mb-1 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
+            {/* Contenu texte - simplifié */}
+            <div className="flex flex-col flex-1 p-3">
+              <span className="text-[10px] font-medium mb-0.5 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
                 Rédactrice de Scripts
               </span>
-              <h3 className="text-xl font-bold text-white/70 mb-2">Lou</h3>
-              <p className="text-gray-500 text-xs leading-relaxed flex-1 line-clamp-2">
-                Rédige des scripts YouTube viraux et captivants pour vos vidéos.
+              <h3 className="text-base font-bold text-white/80 mb-1">Lou</h3>
+              <p className="text-gray-500 text-[10px] leading-relaxed flex-1 line-clamp-2">
+                Scripts YouTube viraux et captivants.
               </p>
 
-              {/* Bouton désactivé */}
-              <div className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-white/5 text-white/40 text-xs font-semibold cursor-not-allowed">
-                Bientôt disponible
+              {/* Bouton désactivé - plus compact */}
+              <div className="mt-3 flex items-center justify-center w-full py-2 rounded-lg bg-white/5 text-white/40 text-[10px] font-medium">
+                Bientôt
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

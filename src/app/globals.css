@@ -366,4 +366,72 @@
     background-size: 200% 200%;
     animation: gradient-rotate 3s ease infinite;
   }
+
+  /* ==========================================
+     ANIMATIONS SCROLL MINIATURES - CSS PURE (performant mobile)
+     ========================================== */
+  
+  /* Mobile - moins de distance à parcourir */
+  @keyframes scroll-left-mobile {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  @keyframes scroll-right-mobile {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  
+  /* Desktop - plus de distance */
+  @keyframes scroll-left-desktop {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  @keyframes scroll-right-desktop {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  
+  .animate-scroll-left {
+    animation: scroll-left-mobile 25s linear infinite;
+    will-change: transform;
+  }
+  
+  .animate-scroll-right {
+    animation: scroll-right-mobile 25s linear infinite;
+    will-change: transform;
+  }
+  
+  .animate-scroll-left-desktop {
+    animation: scroll-left-desktop 45s linear infinite;
+    will-change: transform;
+  }
+  
+  .animate-scroll-right-desktop {
+    animation: scroll-right-desktop 45s linear infinite;
+    will-change: transform;
+  }
+  
+  /* Pause animations quand hors écran pour économiser les ressources */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-scroll-left,
+    .animate-scroll-right,
+    .animate-scroll-left-desktop,
+    .animate-scroll-right-desktop,
+    .animate-grid-move {
+      animation: none;
+    }
+  }
+
+  /* Animation du grid hero - CSS pure */
+  @keyframes grid-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(80px, 80px); }
+  }
+  
+  .animate-grid-move {
+    animation: grid-move 25s linear infinite;
+    will-change: transform;
+  }
 }

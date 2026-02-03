@@ -32,67 +32,56 @@ const agents = [
 ];
 
 /**
- * Hero Section avec quadrillage animé en arrière-plan
+ * Hero Section avec quadrillage en arrière-plan
+ * Optimisé pour mobile : pas d'animation du grid sur mobile (trop lourd)
  */
 
-// Composant pour le quadrillage animé en arrière-plan
+// Composant pour le quadrillage - statique sur mobile, animé sur desktop
 function AnimatedGridBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Pattern SVG avec animation Framer Motion */}
-      <motion.svg
-        className="absolute w-[200%] h-[200%] -top-1/2 -left-1/2"
-        animate={{
-          x: [0, 80],
-          y: [0, 80],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "linear",
-        }}
+      {/* Version Mobile - Grid STATIQUE (pas d'animation = performance) */}
+      <svg
+        className="absolute inset-0 w-full h-full sm:hidden"
+        style={{ opacity: 0.08 }}
       >
         <defs>
           <pattern
-            id="hero-grid-pattern"
-            width="80"
-            height="80"
+            id="hero-grid-mobile"
+            width="60"
+            height="60"
             patternUnits="userSpaceOnUse"
           >
-            {/* Lignes verticales */}
-            <line
-              x1="80"
-              y1="0"
-              x2="80"
-              y2="80"
-              stroke="rgba(255, 255, 255, 0.12)"
-              strokeWidth="1"
-            />
-            {/* Lignes horizontales */}
-            <line
-              x1="0"
-              y1="80"
-              x2="80"
-              y2="80"
-              stroke="rgba(255, 255, 255, 0.12)"
-              strokeWidth="1"
-            />
+            <line x1="60" y1="0" x2="60" y2="60" stroke="white" strokeWidth="1" />
+            <line x1="0" y1="60" x2="60" y2="60" stroke="white" strokeWidth="1" />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#hero-grid-pattern)" />
-      </motion.svg>
+        <rect width="100%" height="100%" fill="url(#hero-grid-mobile)" />
+      </svg>
+
+      {/* Version Desktop - Grid animé avec CSS (plus performant que Framer Motion) */}
+      <div className="hidden sm:block absolute w-[200%] h-[200%] -top-1/2 -left-1/2 animate-grid-move">
+        <svg className="w-full h-full">
+          <defs>
+            <pattern
+              id="hero-grid-pattern"
+              width="80"
+              height="80"
+              patternUnits="userSpaceOnUse"
+            >
+              <line x1="80" y1="0" x2="80" y2="80" stroke="rgba(255, 255, 255, 0.12)" strokeWidth="1" />
+              <line x1="0" y1="80" x2="80" y2="80" stroke="rgba(255, 255, 255, 0.12)" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hero-grid-pattern)" />
+        </svg>
+      </div>
 
       {/* Masque dégradé pour fade vers les bords */}
       <div 
         className="absolute inset-0"
         style={{
-          background: `
-            radial-gradient(
-              ellipse 120% 100% at 50% 50%,
-              transparent 30%,
-              hsl(224 71% 4%) 80%
-            )
-          `,
+          background: `radial-gradient(ellipse 120% 100% at 50% 50%, transparent 30%, hsl(224 71% 4%) 80%)`,
         }}
       />
     </div>
@@ -106,8 +95,8 @@ export function Hero() {
       {/* Quadrillage animé en arrière-plan */}
       <AnimatedGridBackground />
 
-      {/* Orbes lumineuses en arrière-plan */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Orbes lumineuses - MASQUÉES sur mobile (trop lourd avec blur) */}
+      <div className="absolute inset-0 pointer-events-none hidden sm:block">
         {/* Orbe ambre/orange */}
         <div 
           className="absolute top-1/4 left-1/4 w-[600px] h-[400px] opacity-25"
