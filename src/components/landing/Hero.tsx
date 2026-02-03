@@ -134,17 +134,27 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="
-            text-3xl sm:text-5xl md:text-6xl lg:text-7xl
+            text-[1.75rem] sm:text-5xl md:text-6xl lg:text-7xl
             font-bold tracking-tight
-            leading-[1.15]
+            leading-[1.2] sm:leading-[1.15]
             mb-4 sm:mb-6
-            px-2 sm:px-0
+            px-4 sm:px-0
+            text-center
           "
         >
-          <span className="block text-white">Des agents créatifs surpuissants</span>
-          <span className="block mt-2 text-gradient">pour dominer YouTube.</span>
+          {/* Mobile : 3 lignes bien découpées */}
+          <span className="sm:hidden">
+            <span className="block text-white">Des agents créatifs</span>
+            <span className="block text-white">surpuissants</span>
+            <span className="block mt-1 text-gradient">pour dominer YouTube.</span>
+          </span>
+          {/* Desktop : 2 lignes */}
+          <span className="hidden sm:block">
+            <span className="block text-white">Des agents créatifs surpuissants</span>
+            <span className="block mt-2 text-gradient">pour dominer YouTube.</span>
+          </span>
           {/* Ligne design sous le titre */}
-          <span className="block mx-auto mt-4 w-24 sm:w-32 h-1 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500" />
+          <span className="block mx-auto mt-3 sm:mt-4 w-20 sm:w-32 h-1 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500" />
         </motion.h1>
 
         {/* Sous-titre */}
@@ -231,26 +241,26 @@ export function Hero() {
           </Link>
         </motion.div>
 
-        {/* Stats - Remonté sur mobile */}
+        {/* Stats - Compact sur mobile */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.8 }}
-          className="mt-8 sm:mt-16 flex flex-wrap justify-center gap-6 sm:gap-12 text-sm"
+          className="mt-4 sm:mt-16 flex flex-wrap justify-center gap-4 sm:gap-12 text-sm"
         >
           <div className="flex flex-col items-center">
-            <span className="text-xl sm:text-3xl font-bold text-white">287+</span>
-            <span className="text-gray-500 text-xs sm:text-sm">Créateurs actifs</span>
+            <span className="text-lg sm:text-3xl font-bold text-white">287+</span>
+            <span className="text-gray-500 text-[10px] sm:text-sm">Créateurs actifs</span>
           </div>
-          <div className="w-px h-10 sm:h-12 bg-white/10" />
+          <div className="w-px h-8 sm:h-12 bg-white/10" />
           <div className="flex flex-col items-center">
-            <span className="text-xl sm:text-3xl font-bold text-white">1,200+</span>
-            <span className="text-gray-500 text-xs sm:text-sm">Miniatures générées</span>
+            <span className="text-lg sm:text-3xl font-bold text-white">1,200+</span>
+            <span className="text-gray-500 text-[10px] sm:text-sm">Miniatures générées</span>
           </div>
-          <div className="w-px h-10 sm:h-12 bg-white/10" />
+          <div className="w-px h-8 sm:h-12 bg-white/10" />
           <div className="flex flex-col items-center">
-            <span className="text-xl sm:text-3xl font-bold text-gradient">x2</span>
-            <span className="text-gray-500 text-xs sm:text-sm">CTR moyen</span>
+            <span className="text-lg sm:text-3xl font-bold text-gradient">x2</span>
+            <span className="text-gray-500 text-[10px] sm:text-sm">CTR moyen</span>
           </div>
         </motion.div>
       </div>
