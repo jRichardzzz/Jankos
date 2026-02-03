@@ -34,10 +34,11 @@ export default function Home() {
       <footer className="py-8 border-t border-white/[0.06]">
         <div className="container-custom flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
           <p>© 2026 Jankos.cc. Tous droits réservés.</p>
-          <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-white transition-colors">Confidentialité</a>
-            <a href="#" className="hover:text-white transition-colors">CGU</a>
-            <a href="#" className="hover:text-white transition-colors">Contact</a>
+          <div className="flex items-center gap-4 sm:gap-6 flex-wrap justify-center">
+            <a href="/confidentialite" className="hover:text-white transition-colors">Confidentialité</a>
+            <a href="/cgv" className="hover:text-white transition-colors">CGV</a>
+            <a href="/mentions-legales" className="hover:text-white transition-colors">Mentions légales</a>
+            <a href="mailto:contact@jankos.cc" className="hover:text-white transition-colors">Contact</a>
           </div>
         </div>
       </footer>
