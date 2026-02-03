@@ -31,7 +31,7 @@ const pricingPlans = [
     priceAnnual: 16,
     buttonText: "Commencer",
     features: [
-      { category: "Agents IA", items: ["Génération de miniatures", "Recherche d'idées", "Création de Shorts"] },
+      { category: "Agents IA", items: ["Génération de miniatures", "Recherche d'idées", "Stratégie SEO"] },
     ],
     popular: false,
     icon: "🚀",
