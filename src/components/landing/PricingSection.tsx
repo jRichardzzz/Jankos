@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const pricingPlans = [
   {
     name: "Pay-as-you-go",
-    description: "Commencez petit avec un achat unique — évoluez selon vos besoins. Rechargez vos crédits à tout moment.",
+    description: "Commencez petit avec un achat unique — évoluez selon vos besoins. Rechargez vos crédits à tout moment.\n\n1 miniature = 10 crédits",
     creditOptions: [
       { credits: 30, price: 8.90 },
       { credits: 100, price: 19.90 },
@@ -26,13 +26,12 @@ const pricingPlans = [
   },
   {
     name: "Lite",
-    subtitle: "150 crédits par mois",
+    subtitle: "15 miniatures par mois",
     price: 19,
     priceAnnual: 16,
     buttonText: "Commencer",
     features: [
       { category: "Agents IA", items: ["Génération de miniatures", "Recherche d'idées", "Création de Shorts"] },
-      { category: "Exports", items: ["Qualité HD", "Sans filigrane"] },
     ],
     popular: false,
     icon: "🚀",
