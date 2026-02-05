@@ -511,13 +511,20 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         {/* Header - Mobile */}
         <header className="md:hidden sticky top-0 z-30 bg-white border-b border-gray-200">
           <div className="flex items-center justify-between px-4 py-3">
-            {/* Menu button only */}
-            <button 
-              onClick={() => setMobileMenuOpen(true)}
-              className="p-2 -ml-2 text-gray-600"
-            >
-              <SidebarIcon icon="menu" />
-            </button>
+            {/* Logo */}
+            <Link href="/">
+              <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-amber-500/30 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
+                  <path 
+                    d="M7 5H15M15 5V15C15 17.7614 12.7614 20 10 20V20C8.34315 20 7 18.6569 7 17V16" 
+                    stroke="#f59e0b" 
+                    strokeWidth="2.5" 
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            </Link>
 
             {/* Credits & Avatar */}
             <div className="flex items-center gap-2">

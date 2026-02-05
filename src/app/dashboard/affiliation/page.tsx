@@ -1,11 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/context/AuthContext';
 import { 
-  ArrowLeft, 
   Share2, 
   Copy, 
   Check, 
@@ -149,69 +147,62 @@ export default function AffiliationPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto overflow-x-hidden">
       {/* Header */}
-      <div className="mb-8">
-        <Link
-          href="/dashboard"
-          className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-4 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm font-medium">Retour</span>
-        </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Programme d&apos;affiliation</h1>
-        <p className="text-gray-500">Gagnez 30% de commission sur chaque vente de vos filleuls</p>
+      <div className="mb-6">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900">Programme d&apos;affiliation</h1>
+        <p className="text-sm md:text-base text-gray-500">Gagnez 30% sur chaque vente</p>
       </div>
 
       {affiliateData && (
         <>
-          {/* Stats Cards */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
-            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-green-600" />
+          {/* Stats Cards - Mobile optimized */}
+          <div className="grid grid-cols-3 gap-2 md:gap-4 mb-6">
+            <div className="bg-white rounded-xl md:rounded-2xl p-3 md:p-6 border border-gray-200 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-green-100 rounded-lg md:rounded-xl flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
                 </div>
-                <span className="text-gray-500 text-sm">Gains totaux</span>
               </div>
-              <p className="text-3xl font-bold text-gray-900">
-                {affiliateData.total_earnings?.toFixed(2) || '0.00'}€
+              <p className="text-lg md:text-3xl font-bold text-gray-900">
+                {affiliateData.total_earnings?.toFixed(0) || '0'}€
               </p>
+              <span className="text-xs md:text-sm text-gray-500">Gains</span>
             </div>
-            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                  <Users className="w-5 h-5 text-blue-600" />
+            <div className="bg-white rounded-xl md:rounded-2xl p-3 md:p-6 border border-gray-200 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-lg md:rounded-xl flex items-center justify-center">
+                  <Users className="w-4 h-4 md:w-5 md:h-5 text-blue-600" />
                 </div>
-                <span className="text-gray-500 text-sm">Filleuls</span>
               </div>
-              <p className="text-3xl font-bold text-gray-900">
+              <p className="text-lg md:text-3xl font-bold text-gray-900">
                 {affiliateData.total_referrals || 0}
               </p>
+              <span className="text-xs md:text-sm text-gray-500">Filleuls</span>
             </div>
-            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                  <Share2 className="w-5 h-5 text-amber-600" />
+            <div className="bg-white rounded-xl md:rounded-2xl p-3 md:p-6 border border-gray-200 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-amber-100 rounded-lg md:rounded-xl flex items-center justify-center">
+                  <Share2 className="w-4 h-4 md:w-5 md:h-5 text-amber-600" />
                 </div>
-                <span className="text-gray-500 text-sm">Commission</span>
               </div>
-              <p className="text-3xl font-bold text-gray-900">
+              <p className="text-lg md:text-3xl font-bold text-gray-900">
                 {affiliateData.commission_rate}%
               </p>
+              <span className="text-xs md:text-sm text-gray-500">Commission</span>
             </div>
           </div>
 
-          {/* Affiliate Link */}
-          <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm mb-8">
-            <h3 className="font-semibold text-gray-900 mb-4">Votre lien d&apos;affiliation</h3>
-            <div className="flex gap-3">
-              <div className="flex-1 bg-gray-100 rounded-xl px-4 py-3 font-mono text-sm text-gray-700 overflow-x-auto">
+          {/* Affiliate Link - Mobile optimized */}
+          <div className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 border border-gray-200 shadow-sm mb-6">
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm md:text-base">Votre lien</h3>
+            <div className="flex flex-col md:flex-row gap-2 md:gap-3">
+              <div className="flex-1 bg-gray-100 rounded-lg md:rounded-xl px-3 py-2 md:px-4 md:py-3 font-mono text-xs md:text-sm text-gray-700 break-all">
                 {affiliateLink}
               </div>
               <button
                 onClick={copyLink}
-                className={`px-4 py-3 rounded-xl font-medium flex items-center gap-2 transition-all ${
+                className={`px-4 py-2 md:py-3 rounded-lg md:rounded-xl font-medium flex items-center justify-center gap-2 transition-all text-sm ${
                   copied 
                     ? 'bg-green-500 text-white' 
                     : 'bg-amber-500 text-white hover:bg-amber-600'
@@ -221,104 +212,96 @@ export default function AffiliationPage() {
                 {copied ? 'Copié !' : 'Copier'}
               </button>
             </div>
-            <p className="text-sm text-gray-500 mt-3">
+            <p className="text-xs md:text-sm text-gray-500 mt-2">
               Code : <span className="font-mono font-semibold text-amber-600">{affiliateData.code}</span>
             </p>
           </div>
 
-          {/* Referrals List */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm mb-8 overflow-hidden">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="font-semibold text-gray-900">Vos filleuls</h3>
-              <p className="text-sm text-gray-500">Personnes inscrites avec votre lien</p>
+          {/* Referrals List - Mobile optimized */}
+          <div className="bg-white rounded-xl md:rounded-2xl border border-gray-200 shadow-sm mb-6 overflow-hidden">
+            <div className="p-4 md:p-6 border-b border-gray-200">
+              <h3 className="font-semibold text-gray-900 text-sm md:text-base">Vos filleuls</h3>
             </div>
             {referrals.length > 0 ? (
               <div className="divide-y divide-gray-100">
                 {referrals.map(ref => (
-                  <div key={ref.id} className="px-6 py-4 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                  <div key={ref.id} className="px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
+                    <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                      <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center text-white text-xs md:text-sm font-bold flex-shrink-0">
                         {ref.profiles?.full_name?.[0] || ref.profiles?.email?.[0] || '?'}
                       </div>
-                      <div>
-                        <p className="font-medium text-gray-900">{ref.profiles?.full_name || 'Sans nom'}</p>
-                        <p className="text-sm text-gray-500">{ref.profiles?.email}</p>
+                      <div className="min-w-0">
+                        <p className="font-medium text-gray-900 text-sm truncate">{ref.profiles?.full_name || 'Sans nom'}</p>
+                        <p className="text-xs text-gray-500 truncate">{ref.profiles?.email}</p>
                       </div>
                     </div>
-                    <span className="text-sm text-gray-400">
+                    <span className="text-xs text-gray-400 flex-shrink-0 ml-2">
                       {new Date(ref.created_at).toLocaleDateString('fr-FR')}
                     </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="p-8 text-center text-gray-500">
-                <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>Aucun filleul pour le moment</p>
-                <p className="text-sm">Partagez votre lien pour commencer !</p>
+              <div className="p-6 text-center text-gray-500">
+                <Users className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">Aucun filleul</p>
               </div>
             )}
           </div>
 
-          {/* Earnings History */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="font-semibold text-gray-900">Historique des commissions</h3>
-              <p className="text-sm text-gray-500">Vos gains d&apos;affiliation</p>
+          {/* Earnings History - Mobile optimized */}
+          <div className="bg-white rounded-xl md:rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="p-4 md:p-6 border-b border-gray-200">
+              <h3 className="font-semibold text-gray-900 text-sm md:text-base">Commissions</h3>
             </div>
             {earnings.length > 0 ? (
               <div className="divide-y divide-gray-100">
                 {earnings.map(earn => (
-                  <div key={earn.id} className="px-6 py-4 flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        Commission sur {earn.original_amount.toFixed(2)}€
+                  <div key={earn.id} className="px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
+                    <div className="min-w-0">
+                      <p className="font-medium text-gray-900 text-sm">
+                        Sur {earn.original_amount.toFixed(0)}€
                       </p>
-                      <p className="text-sm text-gray-500">
-                        {new Date(earn.created_at).toLocaleDateString('fr-FR', {
-                          day: '2-digit',
-                          month: 'long',
-                          year: 'numeric'
-                        })}
+                      <p className="text-xs text-gray-500">
+                        {new Date(earn.created_at).toLocaleDateString('fr-FR')}
                       </p>
                     </div>
-                    <div className="text-right">
-                      <p className="font-bold text-green-600">+{earn.amount.toFixed(2)}€</p>
+                    <div className="text-right flex-shrink-0 ml-2">
+                      <p className="font-bold text-green-600 text-sm">+{earn.amount.toFixed(2)}€</p>
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
                         earn.status === 'paid' 
                           ? 'bg-green-100 text-green-700'
                           : 'bg-amber-100 text-amber-700'
                       }`}>
-                        {earn.status === 'paid' ? 'Payé' : 'En attente'}
+                        {earn.status === 'paid' ? 'Payé' : 'Attente'}
                       </span>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="p-8 text-center text-gray-500">
-                <TrendingUp className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>Aucune commission pour le moment</p>
-                <p className="text-sm">Les commissions apparaîtront ici</p>
+              <div className="p-6 text-center text-gray-500">
+                <TrendingUp className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">Aucune commission</p>
               </div>
             )}
           </div>
 
-          {/* How it works */}
-          <div className="mt-8 p-6 bg-gray-50 rounded-2xl border border-gray-200">
-            <h3 className="font-semibold text-gray-900 mb-4">💡 Comment ça marche ?</h3>
-            <div className="grid grid-cols-3 gap-6">
-              <div>
-                <div className="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold mb-2">1</div>
-                <p className="text-sm text-gray-600">Partagez votre lien avec votre communauté</p>
+          {/* How it works - Mobile optimized */}
+          <div className="mt-6 p-4 md:p-6 bg-gray-50 rounded-xl md:rounded-2xl border border-gray-200">
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm md:text-base">💡 Comment ça marche ?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
+              <div className="flex md:flex-col items-center md:items-start gap-3">
+                <div className="w-7 h-7 md:w-8 md:h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">1</div>
+                <p className="text-xs md:text-sm text-gray-600">Partagez votre lien</p>
               </div>
-              <div>
-                <div className="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold mb-2">2</div>
-                <p className="text-sm text-gray-600">Vos filleuls s&apos;inscrivent et achètent des crédits</p>
+              <div className="flex md:flex-col items-center md:items-start gap-3">
+                <div className="w-7 h-7 md:w-8 md:h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">2</div>
+                <p className="text-xs md:text-sm text-gray-600">Ils s&apos;inscrivent et achètent</p>
               </div>
-              <div>
-                <div className="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold mb-2">3</div>
-                <p className="text-sm text-gray-600">Vous recevez 30% sur chaque achat</p>
+              <div className="flex md:flex-col items-center md:items-start gap-3">
+                <div className="w-7 h-7 md:w-8 md:h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
+                <p className="text-xs md:text-sm text-gray-600">Vous recevez 30%</p>
               </div>
             </div>
           </div>

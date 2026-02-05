@@ -1,18 +1,38 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useCredits } from '@/context/CreditsContext';
 import { useProjects } from '@/context/ProjectsContext';
-import { User, Zap, FolderOpen, TrendingUp } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
+import { User, Zap, FolderOpen, TrendingUp, Gift } from 'lucide-react';
 
 export default function ProfilPage() {
   const { user } = useAuth();
   const { credits } = useCredits();
   const { projects } = useProjects();
+  const [affiliateEarnings, setAffiliateEarnings] = useState<number>(0);
+  const supabase = createClient();
 
   const completedProjects = projects.filter(p => p.status === 'completed').length;
   const totalImages = projects.reduce((acc, p) => acc + p.images.length, 0);
+
+  useEffect(() => {
+    const fetchAffiliateEarnings = async () => {
+      if (!user) return;
+      const { data } = await supabase
+        .from('affiliate_codes')
+        .select('total_earnings')
+        .eq('user_id', user.id)
+        .single();
+      if (data) {
+        setAffiliateEarnings(data.total_earnings || 0);
+      }
+    };
+    fetchAffiliateEarnings();
+  }, [user, supabase]);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -66,37 +86,58 @@ export default function ProfilPage() {
       </motion.div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
-              <Zap className="w-6 h-6 text-amber-600" />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <Link href="/dashboard/credits">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white rounded-2xl border border-gray-200 p-4 md:p-6 shadow-sm hover:border-amber-300 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                <Zap className="w-5 h-5 md:w-6 md:h-6 text-amber-600" />
+              </div>
+              <div>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{credits}</p>
+                <p className="text-xs md:text-sm text-gray-500">Crédits</p>
+              </div>
             </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-900">{credits}</p>
-              <p className="text-sm text-gray-500">Crédits disponibles</p>
+          </motion.div>
+        </Link>
+
+        <Link href="/dashboard/affiliation">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="bg-white rounded-2xl border border-gray-200 p-4 md:p-6 shadow-sm hover:border-green-300 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                <Gift className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
+              </div>
+              <div>
+                <p className="text-xl md:text-2xl font-bold text-gray-900">{affiliateEarnings.toFixed(0)}€</p>
+                <p className="text-xs md:text-sm text-gray-500">Gains Affi</p>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </Link>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm"
+          className="bg-white rounded-2xl border border-gray-200 p-4 md:p-6 shadow-sm"
         >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center">
-              <FolderOpen className="w-6 h-6 text-pink-600" />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-pink-100 flex items-center justify-center">
+              <FolderOpen className="w-5 h-5 md:w-6 md:h-6 text-pink-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{completedProjects}</p>
-              <p className="text-sm text-gray-500">Projets réalisés</p>
+              <p className="text-xl md:text-2xl font-bold text-gray-900">{completedProjects}</p>
+              <p className="text-xs md:text-sm text-gray-500">Projets</p>
             </div>
           </div>
         </motion.div>
@@ -104,16 +145,16 @@ export default function ProfilPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm"
+          transition={{ delay: 0.35 }}
+          className="bg-white rounded-2xl border border-gray-200 p-4 md:p-6 shadow-sm"
         >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-violet-600" />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-violet-100 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-violet-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{totalImages}</p>
-              <p className="text-sm text-gray-500">Miniatures générées</p>
+              <p className="text-xl md:text-2xl font-bold text-gray-900">{totalImages}</p>
+              <p className="text-xs md:text-sm text-gray-500">Miniatures</p>
             </div>
           </div>
         </motion.div>
