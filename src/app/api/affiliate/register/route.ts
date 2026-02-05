@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Client Supabase admin
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Client Supabase admin - initialisation lazy
+let supabaseAdminInstance: SupabaseClient | null = null;
+
+function getSupabaseAdmin(): SupabaseClient {
+  if (!supabaseAdminInstance) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('Supabase environment variables are not set');
+    }
+    supabaseAdminInstance = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+  }
+  return supabaseAdminInstance;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,7 +26,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Vérifier que le code d'affiliation existe
-    const { data: affiliate, error: affiliateError } = await supabaseAdmin
+    const { data: affiliate, error: affiliateError } = await getSupabaseAdmin()
       .from('affiliate_codes')
       .select('user_id, code')
       .eq('code', affiliateCode.toUpperCase())
@@ -32,7 +42,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Vérifier que l'utilisateur n'est pas déjà parrainé
-    const { data: existingReferral } = await supabaseAdmin
+    const { data: existingReferral } = await getSupabaseAdmin()
       .from('referrals')
       .select('id')
       .eq('referred_id', userId)
@@ -43,7 +53,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Créer le parrainage
-    const { error: referralError } = await supabaseAdmin
+    const { error: referralError } = await getSupabaseAdmin()
       .from('referrals')
       .insert({
         referrer_id: affiliate.user_id,
@@ -58,13 +68,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Incrémenter le compteur de filleuls
-    const { data: currentCode } = await supabaseAdmin
+    const { data: currentCode } = await getSupabaseAdmin()
       .from('affiliate_codes')
       .select('total_referrals')
       .eq('code', affiliate.code)
       .single();
 
-    await supabaseAdmin
+    await getSupabaseAdmin()
       .from('affiliate_codes')
       .update({
         total_referrals: (currentCode?.total_referrals || 0) + 1,
