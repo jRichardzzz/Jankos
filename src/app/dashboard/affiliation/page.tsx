@@ -10,8 +10,7 @@ import {
   Copy, 
   Check, 
   Users, 
-  TrendingUp,
-  Gift
+  TrendingUp
 } from 'lucide-react';
 
 interface AffiliateData {
@@ -46,17 +45,47 @@ export default function AffiliationPage() {
   const [earnings, setEarnings] = useState<Earning[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
-  const [generating, setGenerating] = useState(false);
+
+  const generateAffiliateCodeAuto = useCallback(async () => {
+    if (!user) return null;
+    
+    // Générer un code unique basé sur l'email
+    const baseCode = user.email?.split('@')[0].toUpperCase().slice(0, 6) || 'USER';
+    const randomSuffix = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const code = `${baseCode}${randomSuffix}`;
+
+    const { data, error } = await supabase
+      .from('affiliate_codes')
+      .insert({
+        user_id: user.id,
+        code,
+        commission_rate: 30,
+        total_earnings: 0,
+        total_referrals: 0,
+      })
+      .select()
+      .single();
+
+    if (!error && data) {
+      return data;
+    }
+    return null;
+  }, [user, supabase]);
 
   const fetchAffiliateData = useCallback(async () => {
     if (!user) return;
 
     // Récupérer le code d'affiliation
-    const { data: affiliate } = await supabase
+    let { data: affiliate } = await supabase
       .from('affiliate_codes')
       .select('*')
       .eq('user_id', user.id)
       .single();
+
+    // Si pas de code, en créer un automatiquement
+    if (!affiliate) {
+      affiliate = await generateAffiliateCodeAuto();
+    }
 
     if (affiliate) {
       setAffiliateData(affiliate);
@@ -91,40 +120,13 @@ export default function AffiliationPage() {
     }
 
     setLoading(false);
-  }, [user, supabase]);
+  }, [user, supabase, generateAffiliateCodeAuto]);
 
   useEffect(() => {
     if (user) {
       fetchAffiliateData();
     }
   }, [user, fetchAffiliateData]);
-
-  const generateAffiliateCode = async () => {
-    if (!user) return;
-    setGenerating(true);
-
-    // Générer un code unique basé sur l'email
-    const baseCode = user.email?.split('@')[0].toUpperCase().slice(0, 6) || 'USER';
-    const randomSuffix = Math.random().toString(36).substring(2, 6).toUpperCase();
-    const code = `${baseCode}${randomSuffix}`;
-
-    const { data, error } = await supabase
-      .from('affiliate_codes')
-      .insert({
-        user_id: user.id,
-        code,
-        commission_rate: 30,
-        total_earnings: 0,
-        total_referrals: 0,
-      })
-      .select()
-      .single();
-
-    if (!error && data) {
-      setAffiliateData(data);
-    }
-    setGenerating(false);
-  };
 
   const copyLink = () => {
     if (!affiliateData) return;
@@ -161,25 +163,7 @@ export default function AffiliationPage() {
         <p className="text-gray-500">Gagnez 30% de commission sur chaque vente de vos filleuls</p>
       </div>
 
-      {!affiliateData ? (
-        // No affiliate code yet
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8 border border-amber-200 text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Gift className="w-8 h-8 text-white" />
-          </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Rejoignez le programme d&apos;affiliation</h2>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">
-            Partagez Jankos avec votre communauté et gagnez 30% de commission sur chaque achat de vos filleuls.
-          </p>
-          <button
-            onClick={generateAffiliateCode}
-            disabled={generating}
-            className="px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-semibold shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 transition-all disabled:opacity-50"
-          >
-            {generating ? 'Génération...' : 'Obtenir mon lien d\'affiliation'}
-          </button>
-        </div>
-      ) : (
+      {affiliateData && (
         <>
           {/* Stats Cards */}
           <div className="grid grid-cols-3 gap-4 mb-8">

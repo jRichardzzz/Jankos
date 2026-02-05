@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CreditsProvider, useCredits } from "@/context/CreditsContext";
 import { ProjectsProvider } from "@/context/ProjectsContext";
 import { HistoryProvider } from "@/context/HistoryContext";
 import { useAuth } from "@/context/AuthContext";
+import { createClient } from "@/lib/supabase/client";
 
 const sidebarLinks = [
   { href: "/dashboard", label: "Accueil", icon: "home" },
@@ -71,6 +73,29 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { credits, isHydrated } = useCredits();
   const { user, signOut, isLoading } = useAuth();
+  const [affiliateEarnings, setAffiliateEarnings] = useState<number | null>(null);
+  const supabase = createClient();
+
+  // Fetch affiliate earnings
+  useEffect(() => {
+    const fetchAffiliateEarnings = async () => {
+      if (!user) return;
+      
+      const { data } = await supabase
+        .from('affiliate_codes')
+        .select('total_earnings')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (data) {
+        setAffiliateEarnings(data.total_earnings || 0);
+      } else {
+        setAffiliateEarnings(0);
+      }
+    };
+
+    fetchAffiliateEarnings();
+  }, [user, supabase]);
 
   // Get user initials for avatar
   const getUserInitials = () => {
@@ -233,8 +258,33 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         {/* Header */}
         <header className="sticky top-0 z-30 bg-gray-50/80 backdrop-blur-sm border-b border-gray-200">
           <div className="flex items-center justify-end px-8 py-4">
-            {/* Right side - Credits & User */}
+            {/* Right side - Affiliate Earnings, Credits & User */}
             <div className="flex items-center gap-4">
+              {/* Affiliate Earnings */}
+              <Link href="/dashboard/affiliation">
+                <motion.div 
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.25 }}
+                  whileHover={{ scale: 1.02 }}
+                  className="flex items-center gap-3 px-4 py-2 bg-white rounded-2xl border border-gray-200 shadow-sm cursor-pointer hover:shadow-md hover:border-green-200 transition-all duration-200"
+                >
+                  {/* Icon */}
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                    </svg>
+                  </div>
+                  {/* Text */}
+                  <div className="flex flex-col">
+                    <span className="text-xs text-gray-500 font-medium">Gains affiliation</span>
+                    <span className="text-lg font-bold text-gray-900 leading-none">
+                      {affiliateEarnings !== null ? `${affiliateEarnings.toFixed(2)}€` : '--'}
+                    </span>
+                  </div>
+                </motion.div>
+              </Link>
+
               {/* Credits */}
               <Link href="/dashboard/credits">
                 <motion.div 
