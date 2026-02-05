@@ -16,6 +16,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [credits, setCredits] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
 
@@ -34,16 +35,40 @@ export function Navbar() {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
       setLoading(false);
+      
+      // Récupérer les crédits si connecté
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('credits')
+          .eq('id', user.id)
+          .single();
+        if (profile) {
+          setCredits(profile.credits);
+        }
+      }
     };
     checkUser();
 
     // Écouter les changements d'auth
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('credits')
+          .eq('id', session.user.id)
+          .single();
+        if (profile) {
+          setCredits(profile.credits);
+        }
+      } else {
+        setCredits(null);
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase.auth]);
+  }, [supabase]);
 
   return (
     <>
@@ -170,32 +195,46 @@ export function Navbar() {
           >
             {!loading && user ? (
               // Utilisateur connecté
-              <Link
-                href="/dashboard"
-                className="
-                  flex items-center gap-2
-                  px-3 py-1.5
-                  text-sm font-medium
-                  text-white
-                  rounded-full
-                  bg-gradient-to-r from-amber-500 to-orange-500
-                  hover:from-amber-600 hover:to-orange-600
-                  transition-all duration-300
-                "
-              >
-                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold overflow-hidden">
-                  {user.user_metadata?.avatar_url ? (
-                    <img 
-                      src={user.user_metadata.avatar_url} 
-                      alt="" 
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    user.email?.[0].toUpperCase() || 'U'
-                  )}
-                </div>
-                Dashboard
-              </Link>
+              <div className="flex items-center gap-2">
+                {/* Crédits */}
+                <Link
+                  href="/dashboard/credits"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 transition-colors"
+                >
+                  <svg className="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm font-bold text-amber-400">{credits ?? '--'}</span>
+                </Link>
+                
+                {/* Dashboard */}
+                <Link
+                  href="/dashboard"
+                  className="
+                    flex items-center gap-2
+                    px-3 py-1.5
+                    text-sm font-medium
+                    text-white
+                    rounded-full
+                    bg-gradient-to-r from-amber-500 to-orange-500
+                    hover:from-amber-600 hover:to-orange-600
+                    transition-all duration-300
+                  "
+                >
+                  <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold overflow-hidden">
+                    {user.user_metadata?.avatar_url ? (
+                      <img 
+                        src={user.user_metadata.avatar_url} 
+                        alt="" 
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      user.email?.[0].toUpperCase() || 'U'
+                    )}
+                  </div>
+                  Dashboard
+                </Link>
+              </div>
             ) : (
               // Non connecté
               <>
@@ -335,31 +374,54 @@ export function Navbar() {
                 <div className="border-t border-white/10 my-4" />
                 
                 {!loading && user ? (
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="
-                      flex items-center gap-3
-                      px-4 py-3
-                      text-lg font-semibold
-                      text-white
-                      bg-gradient-to-r from-amber-500 to-orange-500
-                      rounded-xl
-                    "
-                  >
-                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold overflow-hidden">
-                      {user.user_metadata?.avatar_url ? (
-                        <img 
-                          src={user.user_metadata.avatar_url} 
-                          alt="" 
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        user.email?.[0].toUpperCase() || 'U'
-                      )}
-                    </div>
-                    Mon Dashboard
-                  </Link>
+                  <>
+                    {/* Crédits - Mobile */}
+                    <Link
+                      href="/dashboard/credits"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="
+                        flex items-center justify-between
+                        px-4 py-3
+                        bg-amber-500/10 border border-amber-500/30
+                        rounded-xl
+                      "
+                    >
+                      <div className="flex items-center gap-2">
+                        <svg className="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-gray-300">Crédits</span>
+                      </div>
+                      <span className="text-lg font-bold text-amber-400">{credits ?? '--'}</span>
+                    </Link>
+                    
+                    {/* Dashboard - Mobile */}
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="
+                        flex items-center gap-3
+                        px-4 py-3
+                        text-lg font-semibold
+                        text-white
+                        bg-gradient-to-r from-amber-500 to-orange-500
+                        rounded-xl
+                      "
+                    >
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold overflow-hidden">
+                        {user.user_metadata?.avatar_url ? (
+                          <img 
+                            src={user.user_metadata.avatar_url} 
+                            alt="" 
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          user.email?.[0].toUpperCase() || 'U'
+                        )}
+                      </div>
+                      Mon Dashboard
+                    </Link>
+                  </>
                 ) : (
                   <>
                     <Link
