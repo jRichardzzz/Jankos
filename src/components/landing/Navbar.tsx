@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
 
 const navLinks = [
   { href: "#agents", label: "Youtube Agent IA" },
@@ -13,6 +15,9 @@ const navLinks = [
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClient();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +27,23 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    // Vérifier si l'utilisateur est connecté
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
+    checkUser();
+
+    // Écouter les changements d'auth
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth]);
 
   return (
     <>
@@ -146,55 +168,88 @@ export function Navbar() {
               shadow-lg shadow-black/30
             "
           >
-            <Link
-              href="/login"
-              className="
-                px-3 py-1.5
-                text-sm font-medium
-                text-gray-400
-                hover:text-white
-                transition-colors duration-300
-                rounded-full
-                hover:bg-white/5
-              "
-            >
-              Connexion
-            </Link>
-
-            <Link
-              href="/signup"
-              className="
-                relative group
-                px-3 py-1.5
-                text-sm font-semibold
-                text-white
-                rounded-full
-                overflow-hidden
-                transition-all duration-300
-              "
-            >
-              <div
+            {!loading && user ? (
+              // Utilisateur connecté
+              <Link
+                href="/dashboard"
                 className="
-                  absolute inset-0
-                  bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500
-                  bg-[length:200%_100%]
-                  group-hover:bg-[position:100%_0]
-                  transition-all duration-500
-                "
-              />
-              <div
-                className="
-                  absolute inset-0
+                  flex items-center gap-2
+                  px-3 py-1.5
+                  text-sm font-medium
+                  text-white
                   rounded-full
-                  opacity-0 group-hover:opacity-100
-                  transition-opacity duration-300
+                  bg-gradient-to-r from-amber-500 to-orange-500
+                  hover:from-amber-600 hover:to-orange-600
+                  transition-all duration-300
                 "
-                style={{
-                  boxShadow: "0 0 20px 2px rgba(139, 92, 246, 0.4)",
-                }}
-              />
-              <span className="relative z-10">Inscription</span>
-            </Link>
+              >
+                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold overflow-hidden">
+                  {user.user_metadata?.avatar_url ? (
+                    <img 
+                      src={user.user_metadata.avatar_url} 
+                      alt="" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    user.email?.[0].toUpperCase() || 'U'
+                  )}
+                </div>
+                Dashboard
+              </Link>
+            ) : (
+              // Non connecté
+              <>
+                <Link
+                  href="/login"
+                  className="
+                    px-3 py-1.5
+                    text-sm font-medium
+                    text-gray-400
+                    hover:text-white
+                    transition-colors duration-300
+                    rounded-full
+                    hover:bg-white/5
+                  "
+                >
+                  Connexion
+                </Link>
+
+                <Link
+                  href="/signup"
+                  className="
+                    relative group
+                    px-3 py-1.5
+                    text-sm font-semibold
+                    text-white
+                    rounded-full
+                    overflow-hidden
+                    transition-all duration-300
+                  "
+                >
+                  <div
+                    className="
+                      absolute inset-0
+                      bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500
+                      bg-[length:200%_100%]
+                      group-hover:bg-[position:100%_0]
+                      transition-all duration-500
+                    "
+                  />
+                  <div
+                    className="
+                      absolute inset-0
+                      rounded-full
+                      opacity-0 group-hover:opacity-100
+                      transition-opacity duration-300
+                    "
+                    style={{
+                      boxShadow: "0 0 20px 2px rgba(139, 92, 246, 0.4)",
+                    }}
+                  />
+                  <span className="relative z-10">Inscription</span>
+                </Link>
+              </>
+            )}
           </motion.div>
 
           {/* Menu burger - Mobile uniquement (à droite) */}
@@ -279,36 +334,66 @@ export function Navbar() {
                 
                 <div className="border-t border-white/10 my-4" />
                 
-                <Link
-                  href="/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="
-                    px-4 py-3
-                    text-lg font-medium
-                    text-gray-300
-                    hover:text-white
-                    hover:bg-white/5
-                    rounded-xl
-                    transition-colors
-                  "
-                >
-                  Connexion
-                </Link>
-                
-                <Link
-                  href="/signup"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="
-                    px-4 py-3
-                    text-lg font-semibold
-                    text-white
-                    bg-gradient-to-r from-amber-500 to-orange-500
-                    rounded-xl
-                    text-center
-                  "
-                >
-                  Inscription
-                </Link>
+                {!loading && user ? (
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="
+                      flex items-center gap-3
+                      px-4 py-3
+                      text-lg font-semibold
+                      text-white
+                      bg-gradient-to-r from-amber-500 to-orange-500
+                      rounded-xl
+                    "
+                  >
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold overflow-hidden">
+                      {user.user_metadata?.avatar_url ? (
+                        <img 
+                          src={user.user_metadata.avatar_url} 
+                          alt="" 
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        user.email?.[0].toUpperCase() || 'U'
+                      )}
+                    </div>
+                    Mon Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="
+                        px-4 py-3
+                        text-lg font-medium
+                        text-gray-300
+                        hover:text-white
+                        hover:bg-white/5
+                        rounded-xl
+                        transition-colors
+                      "
+                    >
+                      Connexion
+                    </Link>
+                    
+                    <Link
+                      href="/signup"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="
+                        px-4 py-3
+                        text-lg font-semibold
+                        text-white
+                        bg-gradient-to-r from-amber-500 to-orange-500
+                        rounded-xl
+                        text-center
+                      "
+                    >
+                      Inscription
+                    </Link>
+                  </>
+                )}
               </div>
             </motion.div>
           </motion.div>
