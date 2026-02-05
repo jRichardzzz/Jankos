@@ -52,6 +52,11 @@ function SidebarIcon({ icon }: { icon: string }) {
         <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
       </svg>
     ),
+    globe: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+      </svg>
+    ),
   };
   return <>{icons[icon]}</>;
 }
@@ -187,11 +192,26 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
+        {/* Bouton retour accueil */}
+        <Link href="/">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.8 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-12 h-12 rounded-xl flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-blue-500 transition-all duration-200 mb-2"
+            title="Retour au site"
+          >
+            <SidebarIcon icon="globe" />
+          </motion.div>
+        </Link>
+
         {/* Déconnexion */}
         <motion.button 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.8 }}
+          transition={{ duration: 0.3, delay: 0.9 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={signOut}
