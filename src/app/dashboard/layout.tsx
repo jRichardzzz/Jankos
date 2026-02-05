@@ -27,7 +27,7 @@ const mobileNavLinks = [
   { href: "/dashboard", label: "Accueil", icon: "home" },
   { href: "/dashboard/realisations", label: "Projets", icon: "folder" },
   { href: "/dashboard/credits", label: "Crédits", icon: "credits" },
-  { href: "/dashboard/affiliation", label: "Gains", icon: "gift" },
+  { href: "/dashboard/affiliation", label: "Affi", icon: "gift" },
   { href: "/dashboard/profil", label: "Profil", icon: "user" },
 ];
 
@@ -351,7 +351,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                   </Link>
                   <Link href="/dashboard/affiliation" onClick={() => setMobileMenuOpen(false)}>
                     <div className="p-4 bg-green-50 rounded-xl">
-                      <p className="text-xs text-green-600 font-medium">Gains</p>
+                      <p className="text-xs text-green-600 font-medium">Gains Affi</p>
                       <p className="text-2xl font-bold text-green-600">
                         {affiliateEarnings !== null ? `${affiliateEarnings.toFixed(0)}€` : '--'}
                       </p>
@@ -511,44 +511,16 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         {/* Header - Mobile */}
         <header className="md:hidden sticky top-0 z-30 bg-white border-b border-gray-200">
           <div className="flex items-center justify-between px-4 py-3">
-            {/* Menu button & Logo */}
-            <div className="flex items-center gap-3">
-              <button 
-                onClick={() => setMobileMenuOpen(true)}
-                className="p-2 -ml-2 text-gray-600"
-              >
-                <SidebarIcon icon="menu" />
-              </button>
-              <Link href="/" className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-amber-500/30 flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
-                    <path 
-                      d="M7 5H15M15 5V15C15 17.7614 12.7614 20 10 20V20C8.34315 20 7 18.6569 7 17V16" 
-                      stroke="#f59e0b" 
-                      strokeWidth="2.5" 
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-              </Link>
-            </div>
+            {/* Menu button only */}
+            <button 
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 -ml-2 text-gray-600"
+            >
+              <SidebarIcon icon="menu" />
+            </button>
 
-            {/* Stats & Avatar */}
+            {/* Credits & Avatar */}
             <div className="flex items-center gap-2">
-              <Link href="/dashboard/affiliation">
-                <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-green-50 rounded-xl">
-                  <div className="w-5 h-5 rounded-md bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
-                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                    </svg>
-                  </div>
-                  <span className="text-sm font-bold text-green-600">
-                    {affiliateEarnings !== null ? `${affiliateEarnings.toFixed(0)}€` : '--'}
-                  </span>
-                </div>
-              </Link>
-
               <Link href="/dashboard/credits">
                 <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-50 rounded-xl">
                   <div className="w-5 h-5 rounded-md bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">

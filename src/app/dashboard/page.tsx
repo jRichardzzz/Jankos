@@ -92,12 +92,12 @@ export default function DashboardPage() {
         <p className="text-gray-500 mt-1">Que voulez-vous créer aujourd&apos;hui ?</p>
       </motion.div>
 
-      {/* Quick actions */}
+      {/* Quick actions - Hidden on mobile */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="flex flex-wrap gap-4 mb-10"
+        className="hidden md:flex flex-wrap gap-4 mb-10"
       >
         {quickActions.map((action, index) => (
           <motion.div
