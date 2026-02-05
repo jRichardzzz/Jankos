@@ -1,37 +1,91 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowLeft, Zap, Check, CreditCard } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { ArrowLeft, Zap, Check, CreditCard, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { useCredits } from '@/context/CreditsContext';
 
 const creditPacks = [
-  { credits: 30, price: 8.90, popular: false },
-  { credits: 100, price: 19.90, popular: false },
-  { credits: 200, price: 39, popular: false },
-  { credits: 500, price: 95, popular: true },
-  { credits: 1000, price: 179, popular: false },
-  { credits: 2000, price: 330, popular: false },
+  { id: 'pack_30', credits: 30, price: 8.90, popular: false },
+  { id: 'pack_100', credits: 100, price: 19.90, popular: false },
+  { id: 'pack_200', credits: 200, price: 39, popular: false },
+  { id: 'pack_500', credits: 500, price: 95, popular: true },
+  { id: 'pack_1000', credits: 1000, price: 179, popular: false },
+  { id: 'pack_2000', credits: 2000, price: 330, popular: false },
 ];
 
 const subscriptionPlans = [
-  { credits: 500, price: 49, priceAnnual: 42 },
-  { credits: 1000, price: 98, priceAnnual: 83 },
-  { credits: 2000, price: 196, priceAnnual: 167 },
-  { credits: 5000, price: 490, priceAnnual: 417 },
+  { id: 'sub_500', credits: 500, price: 49, priceAnnual: 42 },
+  { id: 'sub_1000', credits: 1000, price: 98, priceAnnual: 83 },
+  { id: 'sub_2000', credits: 2000, price: 196, priceAnnual: 167 },
+  { id: 'sub_5000', credits: 5000, price: 490, priceAnnual: 417 },
 ];
 
 export default function CreditsPage() {
-  const { credits } = useCredits();
+  const { credits, refreshCredits } = useCredits();
   const [selectedPack, setSelectedPack] = useState<number | null>(null);
   const [selectedSub, setSelectedSub] = useState<number>(0);
   const [isAnnual, setIsAnnual] = useState(true);
   const [activeTab, setActiveTab] = useState<'packs' | 'subscription'>('packs');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  
+  const searchParams = useSearchParams();
 
-  const handlePurchase = () => {
-    // TODO: Intégrer Stripe ici
-    alert('Stripe sera intégré prochainement !');
+  // Gérer les retours de Stripe
+  useEffect(() => {
+    const success = searchParams.get('success');
+    const canceled = searchParams.get('canceled');
+    const creditsAdded = searchParams.get('credits');
+
+    if (success === 'true') {
+      setMessage({ 
+        type: 'success', 
+        text: creditsAdded 
+          ? `Paiement réussi ! ${creditsAdded} crédits ont été ajoutés à votre compte.`
+          : 'Abonnement activé avec succès !'
+      });
+      refreshCredits();
+      // Nettoyer l'URL
+      window.history.replaceState({}, '', '/dashboard/credits');
+    } else if (canceled === 'true') {
+      setMessage({ type: 'error', text: 'Paiement annulé.' });
+      window.history.replaceState({}, '', '/dashboard/credits');
+    }
+  }, [searchParams, refreshCredits]);
+
+  const handlePurchase = async () => {
+    if (activeTab === 'packs' && selectedPack === null) return;
+    
+    setIsLoading(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(
+          activeTab === 'packs'
+            ? { type: 'pack', packId: creditPacks[selectedPack!].id }
+            : { type: 'subscription', planId: subscriptionPlans[selectedSub].id, isAnnual }
+        ),
+      });
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setMessage({ type: 'error', text: data.error || 'Une erreur est survenue' });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setMessage({ type: 'error', text: 'Erreur de connexion' });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -57,6 +111,26 @@ export default function CreditsPage() {
           </div>
         </div>
       </div>
+
+      {/* Message de succès/erreur */}
+      {message && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`mb-6 p-4 rounded-xl flex items-center gap-3 ${
+            message.type === 'success'
+              ? 'bg-green-50 border border-green-200 text-green-800'
+              : 'bg-red-50 border border-red-200 text-red-800'
+          }`}
+        >
+          {message.type === 'success' ? (
+            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+          ) : (
+            <XCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+          )}
+          <span className="font-medium">{message.text}</span>
+        </motion.div>
+      )}
 
       {/* Tabs */}
       <div className="flex gap-2 mb-8 p-1 bg-gray-100 rounded-xl w-fit">
@@ -126,20 +200,29 @@ export default function CreditsPage() {
 
           {/* Purchase Button for Packs */}
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: isLoading ? 1 : 1.02 }}
+            whileTap={{ scale: isLoading ? 1 : 0.98 }}
             onClick={handlePurchase}
-            disabled={selectedPack === null}
+            disabled={selectedPack === null || isLoading}
             className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all ${
-              selectedPack !== null
+              selectedPack !== null && !isLoading
                 ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >
-            <CreditCard className="w-5 h-5" />
-            {selectedPack !== null
-              ? `Acheter ${creditPacks[selectedPack].credits} crédits pour ${creditPacks[selectedPack].price.toLocaleString('fr-FR')}€`
-              : 'Sélectionnez un pack'}
+            {isLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Redirection vers Stripe...
+              </>
+            ) : (
+              <>
+                <CreditCard className="w-5 h-5" />
+                {selectedPack !== null
+                  ? `Acheter ${creditPacks[selectedPack].credits} crédits pour ${creditPacks[selectedPack].price.toLocaleString('fr-FR')}€`
+                  : 'Sélectionnez un pack'}
+              </>
+            )}
           </motion.button>
         </>
       ) : (
@@ -220,13 +303,27 @@ export default function CreditsPage() {
 
           {/* Purchase Button for Subscription */}
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: isLoading ? 1 : 1.02 }}
+            whileTap={{ scale: isLoading ? 1 : 0.98 }}
             onClick={handlePurchase}
-            className="w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 transition-all"
+            disabled={isLoading}
+            className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all ${
+              !isLoading
+                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}
           >
-            <CreditCard className="w-5 h-5" />
-            S&apos;abonner pour {isAnnual ? subscriptionPlans[selectedSub].priceAnnual : subscriptionPlans[selectedSub].price}€/mois
+            {isLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Redirection vers Stripe...
+              </>
+            ) : (
+              <>
+                <CreditCard className="w-5 h-5" />
+                S&apos;abonner pour {isAnnual ? subscriptionPlans[selectedSub].priceAnnual : subscriptionPlans[selectedSub].price}€/mois
+              </>
+            )}
           </motion.button>
 
           {isAnnual && (
