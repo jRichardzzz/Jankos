@@ -1,0 +1,345 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
+import { useAuth } from '@/context/AuthContext';
+import { 
+  ArrowLeft, 
+  Share2, 
+  Copy, 
+  Check, 
+  Users, 
+  TrendingUp,
+  Gift
+} from 'lucide-react';
+
+interface AffiliateData {
+  code: string;
+  commission_rate: number;
+  total_earnings: number;
+  total_referrals: number;
+}
+
+interface Referral {
+  id: string;
+  created_at: string;
+  profiles: {
+    email: string;
+    full_name: string;
+  };
+}
+
+interface Earning {
+  id: string;
+  amount: number;
+  original_amount: number;
+  status: string;
+  created_at: string;
+}
+
+export default function AffiliationPage() {
+  const { user } = useAuth();
+  const supabase = createClient();
+  const [affiliateData, setAffiliateData] = useState<AffiliateData | null>(null);
+  const [referrals, setReferrals] = useState<Referral[]>([]);
+  const [earnings, setEarnings] = useState<Earning[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const [generating, setGenerating] = useState(false);
+
+  const fetchAffiliateData = useCallback(async () => {
+    if (!user) return;
+
+    // Récupérer le code d'affiliation
+    const { data: affiliate } = await supabase
+      .from('affiliate_codes')
+      .select('*')
+      .eq('user_id', user.id)
+      .single();
+
+    if (affiliate) {
+      setAffiliateData(affiliate);
+
+      // Récupérer les filleuls
+      const { data: refs } = await supabase
+        .from('referrals')
+        .select(`
+          id,
+          created_at,
+          profiles:referred_id(email, full_name)
+        `)
+        .eq('referrer_id', user.id)
+        .order('created_at', { ascending: false });
+
+      // Transformer les données pour correspondre au type
+      const formattedRefs = (refs || []).map((r: { id: string; created_at: string; profiles: { email: string; full_name: string } | { email: string; full_name: string }[] }) => ({
+        id: r.id,
+        created_at: r.created_at,
+        profiles: Array.isArray(r.profiles) ? r.profiles[0] : r.profiles,
+      }));
+      setReferrals(formattedRefs);
+
+      // Récupérer les gains
+      const { data: earns } = await supabase
+        .from('affiliate_earnings')
+        .select('*')
+        .eq('affiliate_id', user.id)
+        .order('created_at', { ascending: false });
+
+      setEarnings(earns || []);
+    }
+
+    setLoading(false);
+  }, [user, supabase]);
+
+  useEffect(() => {
+    if (user) {
+      fetchAffiliateData();
+    }
+  }, [user, fetchAffiliateData]);
+
+  const generateAffiliateCode = async () => {
+    if (!user) return;
+    setGenerating(true);
+
+    // Générer un code unique basé sur l'email
+    const baseCode = user.email?.split('@')[0].toUpperCase().slice(0, 6) || 'USER';
+    const randomSuffix = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const code = `${baseCode}${randomSuffix}`;
+
+    const { data, error } = await supabase
+      .from('affiliate_codes')
+      .insert({
+        user_id: user.id,
+        code,
+        commission_rate: 30,
+        total_earnings: 0,
+        total_referrals: 0,
+      })
+      .select()
+      .single();
+
+    if (!error && data) {
+      setAffiliateData(data);
+    }
+    setGenerating(false);
+  };
+
+  const copyLink = () => {
+    if (!affiliateData) return;
+    const link = `https://jankos.cc/?ref=${affiliateData.code}`;
+    navigator.clipboard.writeText(link);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const affiliateLink = affiliateData 
+    ? `https://jankos.cc/?ref=${affiliateData.code}` 
+    : '';
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto flex items-center justify-center py-20">
+        <div className="animate-spin w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      {/* Header */}
+      <div className="mb-8">
+        <Link
+          href="/dashboard"
+          className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-4 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-sm font-medium">Retour</span>
+        </Link>
+        <h1 className="text-2xl font-bold text-gray-900">Programme d&apos;affiliation</h1>
+        <p className="text-gray-500">Gagnez 30% de commission sur chaque vente de vos filleuls</p>
+      </div>
+
+      {!affiliateData ? (
+        // No affiliate code yet
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8 border border-amber-200 text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Gift className="w-8 h-8 text-white" />
+          </div>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Rejoignez le programme d&apos;affiliation</h2>
+          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+            Partagez Jankos avec votre communauté et gagnez 30% de commission sur chaque achat de vos filleuls.
+          </p>
+          <button
+            onClick={generateAffiliateCode}
+            disabled={generating}
+            className="px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-semibold shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 transition-all disabled:opacity-50"
+          >
+            {generating ? 'Génération...' : 'Obtenir mon lien d\'affiliation'}
+          </button>
+        </div>
+      ) : (
+        <>
+          {/* Stats Cards */}
+          <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-green-600" />
+                </div>
+                <span className="text-gray-500 text-sm">Gains totaux</span>
+              </div>
+              <p className="text-3xl font-bold text-gray-900">
+                {affiliateData.total_earnings?.toFixed(2) || '0.00'}€
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <Users className="w-5 h-5 text-blue-600" />
+                </div>
+                <span className="text-gray-500 text-sm">Filleuls</span>
+              </div>
+              <p className="text-3xl font-bold text-gray-900">
+                {affiliateData.total_referrals || 0}
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                  <Share2 className="w-5 h-5 text-amber-600" />
+                </div>
+                <span className="text-gray-500 text-sm">Commission</span>
+              </div>
+              <p className="text-3xl font-bold text-gray-900">
+                {affiliateData.commission_rate}%
+              </p>
+            </div>
+          </div>
+
+          {/* Affiliate Link */}
+          <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm mb-8">
+            <h3 className="font-semibold text-gray-900 mb-4">Votre lien d&apos;affiliation</h3>
+            <div className="flex gap-3">
+              <div className="flex-1 bg-gray-100 rounded-xl px-4 py-3 font-mono text-sm text-gray-700 overflow-x-auto">
+                {affiliateLink}
+              </div>
+              <button
+                onClick={copyLink}
+                className={`px-4 py-3 rounded-xl font-medium flex items-center gap-2 transition-all ${
+                  copied 
+                    ? 'bg-green-500 text-white' 
+                    : 'bg-amber-500 text-white hover:bg-amber-600'
+                }`}
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? 'Copié !' : 'Copier'}
+              </button>
+            </div>
+            <p className="text-sm text-gray-500 mt-3">
+              Code : <span className="font-mono font-semibold text-amber-600">{affiliateData.code}</span>
+            </p>
+          </div>
+
+          {/* Referrals List */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm mb-8 overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <h3 className="font-semibold text-gray-900">Vos filleuls</h3>
+              <p className="text-sm text-gray-500">Personnes inscrites avec votre lien</p>
+            </div>
+            {referrals.length > 0 ? (
+              <div className="divide-y divide-gray-100">
+                {referrals.map(ref => (
+                  <div key={ref.id} className="px-6 py-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        {ref.profiles?.full_name?.[0] || ref.profiles?.email?.[0] || '?'}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">{ref.profiles?.full_name || 'Sans nom'}</p>
+                        <p className="text-sm text-gray-500">{ref.profiles?.email}</p>
+                      </div>
+                    </div>
+                    <span className="text-sm text-gray-400">
+                      {new Date(ref.created_at).toLocaleDateString('fr-FR')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 text-center text-gray-500">
+                <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p>Aucun filleul pour le moment</p>
+                <p className="text-sm">Partagez votre lien pour commencer !</p>
+              </div>
+            )}
+          </div>
+
+          {/* Earnings History */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <h3 className="font-semibold text-gray-900">Historique des commissions</h3>
+              <p className="text-sm text-gray-500">Vos gains d&apos;affiliation</p>
+            </div>
+            {earnings.length > 0 ? (
+              <div className="divide-y divide-gray-100">
+                {earnings.map(earn => (
+                  <div key={earn.id} className="px-6 py-4 flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-gray-900">
+                        Commission sur {earn.original_amount.toFixed(2)}€
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {new Date(earn.created_at).toLocaleDateString('fr-FR', {
+                          day: '2-digit',
+                          month: 'long',
+                          year: 'numeric'
+                        })}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-green-600">+{earn.amount.toFixed(2)}€</p>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        earn.status === 'paid' 
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-amber-100 text-amber-700'
+                      }`}>
+                        {earn.status === 'paid' ? 'Payé' : 'En attente'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 text-center text-gray-500">
+                <TrendingUp className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p>Aucune commission pour le moment</p>
+                <p className="text-sm">Les commissions apparaîtront ici</p>
+              </div>
+            )}
+          </div>
+
+          {/* How it works */}
+          <div className="mt-8 p-6 bg-gray-50 rounded-2xl border border-gray-200">
+            <h3 className="font-semibold text-gray-900 mb-4">💡 Comment ça marche ?</h3>
+            <div className="grid grid-cols-3 gap-6">
+              <div>
+                <div className="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold mb-2">1</div>
+                <p className="text-sm text-gray-600">Partagez votre lien avec votre communauté</p>
+              </div>
+              <div>
+                <div className="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold mb-2">2</div>
+                <p className="text-sm text-gray-600">Vos filleuls s&apos;inscrivent et achètent des crédits</p>
+              </div>
+              <div>
+                <div className="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold mb-2">3</div>
+                <p className="text-sm text-gray-600">Vous recevez 30% sur chaque achat</p>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

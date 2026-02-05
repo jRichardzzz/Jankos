@@ -8,9 +8,19 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     
     if (!error) {
+      // Rediriger vers une page qui gère l'affiliation côté client
+      // On passe l'ID utilisateur pour traiter le parrainage
+      const userId = data.user?.id;
+      const isNewUser = data.user?.created_at === data.user?.updated_at;
+      
+      if (isNewUser && userId) {
+        // Nouvel utilisateur, rediriger vers le handler d'affiliation
+        return NextResponse.redirect(`${origin}/auth/complete?userId=${userId}&next=${next}`);
+      }
+      
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

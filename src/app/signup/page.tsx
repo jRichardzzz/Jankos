@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
-import { Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { Loader2, AlertCircle, CheckCircle, Gift } from 'lucide-react';
 
-export default function SignupPage() {
+function SignupContent() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,8 +16,26 @@ export default function SignupPage() {
   const [isLoadingSocial, setIsLoadingSocial] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
 
   const supabase = createClient();
+  const searchParams = useSearchParams();
+
+  // Capturer le code d'affiliation de l'URL
+  useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) {
+      setAffiliateCode(ref.toUpperCase());
+      // Stocker dans localStorage pour OAuth
+      localStorage.setItem('affiliate_code', ref.toUpperCase());
+    } else {
+      // Vérifier si on a un code stocké
+      const storedCode = localStorage.getItem('affiliate_code');
+      if (storedCode) {
+        setAffiliateCode(storedCode);
+      }
+    }
+  }, [searchParams]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,16 +48,35 @@ export default function SignupPage() {
       return;
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           full_name: name,
+          affiliate_code: affiliateCode,
         },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
+
+    // Si inscription réussie et code d'affiliation, enregistrer le parrainage
+    if (!error && data?.user && affiliateCode) {
+      try {
+        await fetch('/api/affiliate/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: data.user.id,
+            affiliateCode,
+          }),
+        });
+        // Nettoyer le localStorage
+        localStorage.removeItem('affiliate_code');
+      } catch (e) {
+        console.error('Failed to register affiliate:', e);
+      }
+    }
 
     if (error) {
       if (error.message.includes('already registered')) {
@@ -138,6 +176,20 @@ export default function SignupPage() {
             <span className="text-2xl font-bold text-white">Jankos.cc</span>
           </Link>
         </div>
+
+        {/* Affiliate Banner */}
+        {affiliateCode && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 flex items-center gap-3 p-4 bg-green-500/10 border border-green-500/30 rounded-xl"
+          >
+            <Gift className="w-5 h-5 text-green-500 flex-shrink-0" />
+            <p className="text-sm text-green-400">
+              Vous avez été parrainé ! Code : <span className="font-mono font-bold">{affiliateCode}</span>
+            </p>
+          </motion.div>
+        )}
 
         {/* Card */}
         <div className="bg-neutral-900/80 backdrop-blur-xl border border-neutral-800 rounded-2xl p-8 shadow-2xl">
@@ -319,5 +371,17 @@ export default function SignupPage() {
         </p>
       </motion.div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+      </div>
+    }>
+      <SignupContent />
+    </Suspense>
   );
 }

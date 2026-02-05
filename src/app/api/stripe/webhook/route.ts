@@ -84,13 +84,67 @@ export async function POST(req: NextRequest) {
           }
 
           // Enregistrer la transaction
-          await getSupabaseAdmin().from('transactions').insert({
+          const { data: transaction } = await getSupabaseAdmin().from('transactions').insert({
             user_id: userId,
             type: 'purchase',
             amount: credits,
             description: `Achat de ${credits} crédits`,
             stripe_session_id: session.id,
-          });
+          }).select().single();
+
+          // Vérifier si l'utilisateur a été parrainé pour les commissions
+          const { data: referral } = await getSupabaseAdmin()
+            .from('referrals')
+            .select('referrer_id, affiliate_code')
+            .eq('referred_id', userId)
+            .eq('status', 'active')
+            .single();
+
+          if (referral) {
+            // Calculer la commission (30%)
+            const amountPaid = session.amount_total ? session.amount_total / 100 : 0; // en euros
+            const commissionRate = 0.30;
+            const commissionAmount = amountPaid * commissionRate;
+
+            // Enregistrer la commission
+            await getSupabaseAdmin().from('affiliate_earnings').insert({
+              affiliate_id: referral.referrer_id,
+              referred_id: userId,
+              transaction_id: transaction?.id,
+              amount: commissionAmount,
+              original_amount: amountPaid,
+              status: 'pending',
+            });
+
+            // Mettre à jour les stats de l'affilié
+            await getSupabaseAdmin()
+              .from('affiliate_codes')
+              .update({
+                total_earnings: getSupabaseAdmin().rpc('increment_earnings', { 
+                  code_param: referral.affiliate_code, 
+                  amount_param: commissionAmount 
+                })
+              })
+              .eq('code', referral.affiliate_code);
+
+            // Fallback si RPC n'existe pas: incrémenter manuellement
+            const { data: affiliateCode } = await getSupabaseAdmin()
+              .from('affiliate_codes')
+              .select('total_earnings')
+              .eq('code', referral.affiliate_code)
+              .single();
+
+            if (affiliateCode) {
+              await getSupabaseAdmin()
+                .from('affiliate_codes')
+                .update({
+                  total_earnings: (affiliateCode.total_earnings || 0) + commissionAmount
+                })
+                .eq('code', referral.affiliate_code);
+            }
+
+            console.log(`Commission of ${commissionAmount}€ credited to affiliate ${referral.referrer_id}`);
+          }
 
         } else if (type === 'subscription') {
           // Mettre à jour le profil avec l'abonnement
