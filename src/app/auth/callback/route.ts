@@ -42,13 +42,9 @@ export async function GET(request: Request) {
       const userId = data.user?.id;
       const isNewUser = data.user?.created_at === data.user?.updated_at;
       
-      // Utiliser une page intermédiaire pour laisser les cookies se propager
-      // Particulièrement important pour Safari en navigation privée
-      const finalDestination = isNewUser && userId
-        ? `/auth/complete?userId=${userId}&next=${next}`
-        : next;
-      
-      const redirectUrl = `${origin}/auth/redirect?next=${encodeURIComponent(finalDestination)}`;
+      const redirectUrl = isNewUser && userId
+        ? `${origin}/auth/complete?userId=${userId}&next=${next}`
+        : `${origin}${next}`;
       
       const response = NextResponse.redirect(redirectUrl);
       
