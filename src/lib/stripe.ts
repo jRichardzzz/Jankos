@@ -26,7 +26,7 @@ export const stripe = {
   },
 };
 
-// Configuration des produits
+// Configuration des produits - Packs uniques
 export const CREDIT_PACKS = [
   { id: 'pack_30', credits: 30, price: 890, name: '30 crédits' },
   { id: 'pack_100', credits: 100, price: 1990, name: '100 crédits' },
@@ -34,9 +34,19 @@ export const CREDIT_PACKS = [
   { id: 'pack_500', credits: 500, price: 9500, name: '500 crédits' },
   { id: 'pack_1000', credits: 1000, price: 17900, name: '1000 crédits' },
   { id: 'pack_2000', credits: 2000, price: 33000, name: '2000 crédits' },
+  { id: 'pack_5000', credits: 5000, price: 75000, name: '5000 crédits' },
+  { id: 'pack_10000', credits: 10000, price: 139000, name: '10000 crédits' },
 ] as const;
 
+// Configuration des abonnements
 export const SUBSCRIPTION_PLANS = [
+  { 
+    id: 'sub_150', 
+    credits: 150, 
+    priceMonthly: 1900, 
+    priceYearly: 19200, // 16€/mois * 12
+    name: '150 crédits/mois' 
+  },
   { 
     id: 'sub_500', 
     credits: 500, 
@@ -64,6 +74,13 @@ export const SUBSCRIPTION_PLANS = [
     priceMonthly: 49000, 
     priceYearly: 500400, // 417€/mois * 12
     name: '5000 crédits/mois' 
+  },
+  { 
+    id: 'sub_10000', 
+    credits: 10000, 
+    priceMonthly: 99000, 
+    priceYearly: 1010400, // 842€/mois * 12
+    name: '10000 crédits/mois' 
   },
 ] as const;
 
