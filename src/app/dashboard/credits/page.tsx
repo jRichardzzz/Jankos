@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, Zap, Check, CreditCard, Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, Zap, Check, CreditCard, Loader2, CheckCircle, XCircle, Info } from 'lucide-react';
 import { useCredits } from '@/context/CreditsContext';
 
 const creditPacks = [
@@ -14,13 +14,17 @@ const creditPacks = [
   { id: 'pack_500', credits: 500, price: 95, popular: true },
   { id: 'pack_1000', credits: 1000, price: 179, popular: false },
   { id: 'pack_2000', credits: 2000, price: 330, popular: false },
+  { id: 'pack_5000', credits: 5000, price: 750, popular: false },
+  { id: 'pack_10000', credits: 10000, price: 1390, popular: false },
 ];
 
 const subscriptionPlans = [
+  { id: 'sub_150', credits: 150, price: 19, priceAnnual: 16 },
   { id: 'sub_500', credits: 500, price: 49, priceAnnual: 42 },
   { id: 'sub_1000', credits: 1000, price: 98, priceAnnual: 83 },
   { id: 'sub_2000', credits: 2000, price: 196, priceAnnual: 167 },
   { id: 'sub_5000', credits: 5000, price: 490, priceAnnual: 417 },
+  { id: 'sub_10000', credits: 10000, price: 990, priceAnnual: 842 },
 ];
 
 export default function CreditsPage() {
@@ -31,6 +35,7 @@ export default function CreditsPage() {
   const [activeTab, setActiveTab] = useState<'packs' | 'subscription'>('packs');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [showInfo, setShowInfo] = useState(false);
   
   const searchParams = useSearchParams();
 
@@ -335,15 +340,33 @@ export default function CreditsPage() {
         </>
       )}
 
-      {/* Info */}
-      <div className="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
-        <h3 className="font-semibold text-gray-900 mb-2">💡 Comment ça marche ?</h3>
-        <ul className="text-sm text-gray-600 space-y-1">
-          <li>• <strong>Packs :</strong> Achat unique, crédits valables à vie</li>
-          <li>• <strong>Abonnement :</strong> Crédits renouvelés chaque mois automatiquement</li>
-          <li>• <strong>10 crédits</strong> = 1 miniature ou 1 recherche d&apos;idées</li>
-          <li>• <strong>20 crédits</strong> = 1 stratégie SEO avec Roman</li>
-        </ul>
+      {/* Info tooltip */}
+      <div className="mt-6 md:mt-8 flex justify-center">
+        <div className="relative">
+          <button
+            onClick={() => setShowInfo(!showInfo)}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <Info className="w-4 h-4" />
+            <span>Comment ça marche ?</span>
+          </button>
+          
+          {showInfo && (
+            <motion.div
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 p-3 bg-gray-900 text-white text-xs rounded-xl shadow-lg z-10"
+            >
+              <ul className="space-y-1">
+                <li>• <strong>Packs :</strong> Achat unique, crédits valables à vie</li>
+                <li>• <strong>Abonnement :</strong> Crédits renouvelés chaque mois</li>
+                <li>• <strong>10 crédits</strong> = 1 miniature ou 1 recherche d&apos;idées</li>
+                <li>• <strong>20 crédits</strong> = 1 stratégie SEO avec Roman</li>
+              </ul>
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45" />
+            </motion.div>
+          )}
+        </div>
       </div>
     </div>
   );

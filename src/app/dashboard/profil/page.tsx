@@ -7,10 +7,10 @@ import { useAuth } from '@/context/AuthContext';
 import { useCredits } from '@/context/CreditsContext';
 import { useProjects } from '@/context/ProjectsContext';
 import { createClient } from '@/lib/supabase/client';
-import { User, Zap, FolderOpen, TrendingUp, Gift } from 'lucide-react';
+import { User, Zap, FolderOpen, TrendingUp, Gift, LogOut, Globe } from 'lucide-react';
 
 export default function ProfilPage() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { credits } = useCredits();
   const { projects } = useProjects();
   const [affiliateEarnings, setAffiliateEarnings] = useState<number>(0);
@@ -206,6 +206,29 @@ export default function ProfilPage() {
             </div>
           </Link>
         </div>
+      </motion.div>
+
+      {/* Action Buttons */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="mt-6 flex flex-col sm:flex-row gap-3"
+      >
+        <Link
+          href="/"
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+        >
+          <Globe className="w-4 h-4" />
+          Retour à l&apos;accueil
+        </Link>
+        <button
+          onClick={signOut}
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-600 font-medium hover:bg-red-100 transition-colors"
+        >
+          <LogOut className="w-4 h-4" />
+          Déconnexion
+        </button>
       </motion.div>
     </div>
   );

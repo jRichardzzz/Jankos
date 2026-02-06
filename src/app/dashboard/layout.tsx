@@ -150,35 +150,31 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="hidden md:flex fixed left-0 top-0 bottom-0 w-20 bg-white border-r border-gray-200 flex-col items-center py-6 z-40"
       >
-        {/* Logo - Lien vers l'accueil */}
-        <Link href="/">
-          <motion.div 
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2, type: "spring", stiffness: 200 }}
-            whileHover={{ scale: 1.1 }}
-            className="relative w-10 h-10 rounded-xl bg-neutral-900 border border-amber-500/30 flex items-center justify-center mb-8 cursor-pointer shadow-lg shadow-black/50 overflow-hidden group hover:border-amber-500/50 transition-all duration-300"
-            title="Retour à l'accueil"
-          >
-            <svg viewBox="0 0 24 24" className="w-7 h-7 z-10" fill="none">
-              <defs>
-                <linearGradient id="dashLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#fcd34d" />
-                  <stop offset="50%" stopColor="#f59e0b" />
-                  <stop offset="100%" stopColor="#d97706" />
-                </linearGradient>
-              </defs>
-              <path 
-                d="M7 5H15M15 5V15C15 17.7614 12.7614 20 10 20V20C8.34315 20 7 18.6569 7 17V16" 
-                stroke="url(#dashLogoGrad)" 
-                strokeWidth="2.5" 
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-orange-500/5 opacity-50" />
-          </motion.div>
-        </Link>
+        {/* Logo - Pas de lien, juste décoratif */}
+        <motion.div 
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2, type: "spring", stiffness: 200 }}
+          className="relative w-10 h-10 rounded-xl bg-neutral-900 border border-amber-500/30 flex items-center justify-center mb-8 shadow-lg shadow-black/50 overflow-hidden"
+        >
+          <svg viewBox="0 0 24 24" className="w-7 h-7 z-10" fill="none">
+            <defs>
+              <linearGradient id="dashLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#fcd34d" />
+                <stop offset="50%" stopColor="#f59e0b" />
+                <stop offset="100%" stopColor="#d97706" />
+              </linearGradient>
+            </defs>
+            <path 
+              d="M7 5H15M15 5V15C15 17.7614 12.7614 20 10 20V20C8.34315 20 7 18.6569 7 17V16" 
+              stroke="url(#dashLogoGrad)" 
+              strokeWidth="2.5" 
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-orange-500/5 opacity-50" />
+        </motion.div>
 
         {/* Navigation principale */}
         <nav className="flex flex-col items-center gap-2 flex-1">
@@ -511,20 +507,18 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         {/* Header - Mobile */}
         <header className="md:hidden sticky top-0 z-30 bg-white border-b border-gray-200">
           <div className="flex items-center justify-between px-4 py-3">
-            {/* Logo */}
-            <Link href="/">
-              <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-amber-500/30 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
-                  <path 
-                    d="M7 5H15M15 5V15C15 17.7614 12.7614 20 10 20V20C8.34315 20 7 18.6569 7 17V16" 
-                    stroke="#f59e0b" 
-                    strokeWidth="2.5" 
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </Link>
+            {/* Logo - Pas de lien */}
+            <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-amber-500/30 flex items-center justify-center">
+              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
+                <path 
+                  d="M7 5H15M15 5V15C15 17.7614 12.7614 20 10 20V20C8.34315 20 7 18.6569 7 17V16" 
+                  stroke="#f59e0b" 
+                  strokeWidth="2.5" 
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
 
             {/* Credits & Avatar */}
             <div className="flex items-center gap-2">
