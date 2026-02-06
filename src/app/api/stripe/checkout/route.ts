@@ -63,8 +63,10 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Plan invalide' }, { status: 400 });
       }
 
+      // Pour annuel: on facture le prix annuel total une fois par an
+      // Pour mensuel: on facture le prix mensuel chaque mois
       const interval = isAnnual ? 'year' : 'month';
-      const unitAmount = isAnnual ? Math.round(plan.priceYearly / 12) : plan.priceMonthly;
+      const unitAmount = isAnnual ? plan.priceYearly : plan.priceMonthly;
 
       const session = await getStripe().checkout.sessions.create({
         payment_method_types: ['card'],
@@ -84,7 +86,7 @@ export async function POST(req: NextRequest) {
               currency: 'eur',
               product_data: {
                 name: plan.name,
-                description: `Abonnement ${plan.credits} crédits/${isAnnual ? 'an' : 'mois'} pour Jankos.cc`,
+                description: `Abonnement ${plan.credits} crédits/mois pour Jankos.cc (${isAnnual ? 'annuel' : 'mensuel'})`,
               },
               unit_amount: unitAmount,
               recurring: {
