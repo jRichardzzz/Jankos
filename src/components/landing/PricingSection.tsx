@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
@@ -90,7 +90,7 @@ const pricingPlans = [
 
 export function PricingSection() {
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [selectedCredits, setSelectedCredits] = useState<{ [key: string]: number }>({
     "À la carte": 0,
     "Pro": 0,
