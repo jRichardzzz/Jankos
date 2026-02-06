@@ -151,7 +151,7 @@ export default function AffiliationPage() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-xl md:text-2xl font-bold text-gray-900">Programme d&apos;affiliation</h1>
-        <p className="text-sm md:text-base text-gray-500">Gagnez 30% sur chaque vente</p>
+        <p className="text-sm md:text-base text-gray-500">Gagnez 30% sur chaque paiement à vie !</p>
       </div>
 
       {affiliateData && (
@@ -301,7 +301,7 @@ export default function AffiliationPage() {
               </div>
               <div className="flex md:flex-col items-center md:items-start gap-3">
                 <div className="w-7 h-7 md:w-8 md:h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
-                <p className="text-xs md:text-sm text-gray-600">Vous recevez 30%</p>
+                <p className="text-xs md:text-sm text-gray-600">Vous recevez 30% à vie</p>
               </div>
             </div>
           </div>
