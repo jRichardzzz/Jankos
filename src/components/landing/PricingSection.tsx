@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { createClient } from "@/lib/supabase/client";
 
 const pricingPlans = [
   {
@@ -87,6 +89,8 @@ const pricingPlans = [
 ];
 
 export function PricingSection() {
+  const router = useRouter();
+  const supabase = createClient();
   const [selectedCredits, setSelectedCredits] = useState<{ [key: string]: number }>({
     "À la carte": 0,
     "Pro": 0,
@@ -94,6 +98,24 @@ export function PricingSection() {
   });
   const [isAnnual, setIsAnnual] = useState(true);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<string | null>(null);
+
+  const handlePurchase = async (planName: string) => {
+    setIsLoading(planName);
+    
+    // Vérifier si l'utilisateur est connecté
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      // Rediriger vers la page de connexion
+      router.push('/login?redirect=/dashboard/credits');
+      return;
+    }
+    
+    // Rediriger vers la page de crédits du dashboard
+    router.push('/dashboard/credits');
+    setIsLoading(null);
+  };
 
   return (
     <section id="pricing" className="py-12 sm:py-16 relative overflow-hidden" suppressHydrationWarning>
@@ -319,16 +341,18 @@ export function PricingSection() {
                 <motion.button 
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  onClick={() => handlePurchase(plan.name)}
+                  disabled={isLoading === plan.name}
                   className={`
                     w-full py-4 rounded-xl font-bold text-sm uppercase tracking-wide
-                    transition-all duration-300 mb-5
+                    transition-all duration-300 mb-5 disabled:opacity-50
                     ${plan.popular 
                       ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50" 
                       : "bg-gray-900 text-white hover:bg-gray-800"
                     }
                   `}
                 >
-                  {plan.buttonText}
+                  {isLoading === plan.name ? "Chargement..." : plan.buttonText}
                 </motion.button>
 
                 {/* Prix annuel */}
