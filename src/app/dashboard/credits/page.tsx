@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, Zap, Check, CreditCard, Loader2, CheckCircle, XCircle, Info } from 'lucide-react';
+import { Zap, Check, CreditCard, Loader2, CheckCircle, XCircle, Info } from 'lucide-react';
 import { useCredits } from '@/context/CreditsContext';
 
 const creditPacks = [
@@ -97,32 +96,18 @@ export default function CreditsPage() {
     <div className="max-w-4xl mx-auto">
       {/* Header - Mobile */}
       <div className="md:hidden mb-4">
-        <div className="flex items-center justify-between mb-3">
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-900 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Retour</span>
-          </Link>
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-xl font-bold text-gray-900">Acheter des crédits</h1>
           <div className="flex items-center gap-2 px-2.5 py-1 bg-amber-50 rounded-lg border border-amber-200">
             <Zap className="w-4 h-4 text-amber-600" />
             <span className="text-sm font-bold text-amber-700">{credits}</span>
           </div>
         </div>
-        <h1 className="text-xl font-bold text-gray-900">Acheter des crédits</h1>
       </div>
 
       {/* Header - Desktop */}
       <div className="hidden md:flex items-center justify-between gap-3 mb-8">
         <div className="flex-1 min-w-0">
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-900 mb-4 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Retour</span>
-          </Link>
           <h1 className="text-2xl font-bold text-gray-900">Acheter des crédits</h1>
           <p className="text-sm text-gray-500">Rechargez votre compte pour continuer à utiliser les agents</p>
         </div>
