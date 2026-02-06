@@ -14,11 +14,12 @@ export async function GET(request: Request) {
       const userId = data.user?.id;
       const isNewUser = data.user?.created_at === data.user?.updated_at;
       
-      const redirectUrl = isNewUser && userId
-        ? `${origin}/auth/complete?userId=${userId}&next=${next}`
-        : `${origin}${next}`;
+      // Rediriger vers la page de succès qui forcera un reload après délai
+      const finalDestination = isNewUser && userId
+        ? `/auth/complete?userId=${userId}&next=${next}`
+        : next;
       
-      return NextResponse.redirect(redirectUrl);
+      return NextResponse.redirect(`${origin}/auth/success?next=${encodeURIComponent(finalDestination)}`);
     }
     
     console.error('Auth callback error:', error);
