@@ -95,24 +95,42 @@ export default function CreditsPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-3 mb-6 md:mb-8">
+      {/* Header - Mobile */}
+      <div className="md:hidden mb-4">
+        <div className="flex items-center justify-between mb-3">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-900 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm font-medium">Retour</span>
+          </Link>
+          <div className="flex items-center gap-2 px-2.5 py-1 bg-amber-50 rounded-lg border border-amber-200">
+            <Zap className="w-4 h-4 text-amber-600" />
+            <span className="text-sm font-bold text-amber-700">{credits}</span>
+          </div>
+        </div>
+        <h1 className="text-xl font-bold text-gray-900">Acheter des crédits</h1>
+      </div>
+
+      {/* Header - Desktop */}
+      <div className="hidden md:flex items-center justify-between gap-3 mb-8">
         <div className="flex-1 min-w-0">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-900 mb-2 md:mb-4 transition-colors"
+            className="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-900 mb-4 transition-colors"
           >
-            <ArrowLeft className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            <span className="text-xs md:text-sm font-medium">Retour</span>
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm font-medium">Retour</span>
           </Link>
-          <h1 className="text-lg md:text-2xl font-bold text-gray-900">Acheter des crédits</h1>
-          <p className="text-xs md:text-sm text-gray-500 truncate">Rechargez votre compte pour continuer à utiliser les agents</p>
+          <h1 className="text-2xl font-bold text-gray-900">Acheter des crédits</h1>
+          <p className="text-sm text-gray-500">Rechargez votre compte pour continuer à utiliser les agents</p>
         </div>
-        <div className="flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-4 md:py-2 bg-amber-50 rounded-lg md:rounded-xl border border-amber-200 flex-shrink-0">
-          <Zap className="w-4 h-4 md:w-5 md:h-5 text-amber-600" />
+        <div className="flex items-center gap-3 px-4 py-2 bg-amber-50 rounded-xl border border-amber-200 flex-shrink-0">
+          <Zap className="w-5 h-5 text-amber-600" />
           <div>
-            <p className="text-[10px] md:text-xs text-amber-600 font-medium">Solde actuel</p>
-            <p className="text-sm md:text-lg font-bold text-amber-700">{credits} crédits</p>
+            <p className="text-xs text-amber-600 font-medium">Solde actuel</p>
+            <p className="text-lg font-bold text-amber-700">{credits} crédits</p>
           </div>
         </div>
       </div>
@@ -234,11 +252,11 @@ export default function CreditsPage() {
       ) : (
         <>
           {/* Annual/Monthly Toggle */}
-          <div className="flex flex-col items-center mb-8">
-            <div className="inline-flex items-center bg-gray-100 rounded-full p-1 mb-3">
+          <div className="flex flex-col items-center mb-4 md:mb-8">
+            <div className="inline-flex items-center bg-gray-100 rounded-full p-1 mb-2 md:mb-3">
               <button
                 onClick={() => setIsAnnual(false)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-4 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium transition-all ${
                   !isAnnual
                     ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow'
                     : 'text-gray-500 hover:text-gray-700'
@@ -248,7 +266,7 @@ export default function CreditsPage() {
               </button>
               <button
                 onClick={() => setIsAnnual(true)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-4 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium transition-all ${
                   isAnnual
                     ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow'
                     : 'text-gray-500 hover:text-gray-700'
@@ -258,14 +276,14 @@ export default function CreditsPage() {
               </button>
             </div>
             {isAnnual && (
-              <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
-                Économisez 15%
+              <span className="px-2 md:px-3 py-0.5 md:py-1 bg-green-100 text-green-700 text-xs md:text-sm font-medium rounded-full">
+                -15%
               </span>
             )}
           </div>
 
           {/* Subscription Plans */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mb-6 md:mb-8">
             {subscriptionPlans.map((plan, index) => (
               <motion.button
                 key={plan.credits}
@@ -273,34 +291,34 @@ export default function CreditsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
                 onClick={() => setSelectedSub(index)}
-                className={`relative p-6 rounded-2xl border-2 transition-all text-left ${
+                className={`relative p-3 md:p-6 rounded-xl md:rounded-2xl border-2 transition-all text-left ${
                   selectedSub === index
                     ? 'border-amber-500 bg-amber-50'
                     : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
-                {index === 0 && (
-                  <span className="absolute -top-2 left-4 px-2 py-0.5 bg-amber-500 text-white text-xs font-bold rounded-full">
+                {index === 1 && (
+                  <span className="absolute -top-2 left-2 md:left-4 px-1.5 md:px-2 py-0.5 bg-amber-500 text-white text-[10px] md:text-xs font-bold rounded-full">
                     Populaire
                   </span>
                 )}
-                <div className="flex items-center gap-2 mb-3">
-                  <Zap className={`w-5 h-5 ${selectedSub === index ? 'text-amber-600' : 'text-gray-400'}`} />
-                  <span className="text-xl font-bold text-gray-900">{plan.credits}</span>
+                <div className="flex items-center gap-1 md:gap-2 mb-1 md:mb-3">
+                  <Zap className={`w-4 h-4 md:w-5 md:h-5 ${selectedSub === index ? 'text-amber-600' : 'text-gray-400'}`} />
+                  <span className="text-lg md:text-xl font-bold text-gray-900">{plan.credits}</span>
                 </div>
-                <p className="text-xs text-gray-500 mb-3">crédits / mois</p>
+                <p className="text-[10px] md:text-xs text-gray-500 mb-1 md:mb-3">crédits / mois</p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-2xl font-black text-gray-900">
+                  <span className="text-xl md:text-2xl font-black text-gray-900">
                     {isAnnual ? plan.priceAnnual : plan.price}€
                   </span>
-                  <span className="text-gray-400 text-sm">/ mois</span>
+                  <span className="text-gray-400 text-[10px] md:text-sm">/ mois</span>
                 </div>
                 {isAnnual && (
-                  <p className="text-xs text-gray-400 mt-1 line-through">{plan.price}€</p>
+                  <p className="text-[10px] md:text-xs text-gray-400 mt-0.5 md:mt-1 line-through">{plan.price}€</p>
                 )}
                 {selectedSub === index && (
-                  <div className="absolute top-4 right-4 w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center">
-                    <Check className="w-4 h-4 text-white" />
+                  <div className="absolute top-2 md:top-4 right-2 md:right-4 w-5 h-5 md:w-6 md:h-6 bg-amber-500 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 md:w-4 md:h-4 text-white" />
                   </div>
                 )}
               </motion.button>
@@ -313,7 +331,7 @@ export default function CreditsPage() {
             whileTap={{ scale: isLoading ? 1 : 0.98 }}
             onClick={handlePurchase}
             disabled={isLoading}
-            className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all ${
+            className={`w-full py-3 md:py-4 rounded-lg md:rounded-xl font-bold text-sm md:text-lg flex items-center justify-center gap-2 transition-all ${
               !isLoading
                 ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
@@ -321,19 +339,21 @@ export default function CreditsPage() {
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Redirection vers Stripe...
+                <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />
+                <span className="hidden md:inline">Redirection vers Stripe...</span>
+                <span className="md:hidden">Chargement...</span>
               </>
             ) : (
               <>
-                <CreditCard className="w-5 h-5" />
-                S&apos;abonner pour {isAnnual ? subscriptionPlans[selectedSub].priceAnnual : subscriptionPlans[selectedSub].price}€/mois
+                <CreditCard className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="hidden md:inline">S&apos;abonner pour {isAnnual ? subscriptionPlans[selectedSub].priceAnnual : subscriptionPlans[selectedSub].price}€/mois</span>
+                <span className="md:hidden">{subscriptionPlans[selectedSub].credits} crédits - {isAnnual ? subscriptionPlans[selectedSub].priceAnnual : subscriptionPlans[selectedSub].price}€/mois</span>
               </>
             )}
           </motion.button>
 
           {isAnnual && (
-            <p className="text-center text-sm text-gray-500 mt-3">
+            <p className="text-center text-xs md:text-sm text-gray-500 mt-2 md:mt-3">
               Facturé {(subscriptionPlans[selectedSub].priceAnnual * 12).toLocaleString('fr-FR')}€ par an
             </p>
           )}
