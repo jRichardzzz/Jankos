@@ -35,18 +35,35 @@ export function Navbar() {
     // Vérifier si l'utilisateur est connecté
     const checkUser = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        setUser(user);
+        // D'abord essayer getSession pour forcer le refresh des cookies
+        const { data: { session } } = await supabase.auth.getSession();
         
-        // Récupérer les crédits si connecté
-        if (user) {
+        if (session?.user) {
+          setUser(session.user);
+          
+          // Récupérer les crédits
           const { data: profile } = await supabase
             .from('profiles')
             .select('credits')
-            .eq('id', user.id)
+            .eq('id', session.user.id)
             .single();
           if (profile) {
             setCredits(profile.credits);
+          }
+        } else {
+          // Fallback sur getUser si pas de session
+          const { data: { user } } = await supabase.auth.getUser();
+          setUser(user);
+          
+          if (user) {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('credits')
+              .eq('id', user.id)
+              .single();
+            if (profile) {
+              setCredits(profile.credits);
+            }
           }
         }
       } catch (error) {
@@ -55,12 +72,21 @@ export function Navbar() {
         setLoading(false);
       }
     };
+    
     checkUser();
 
     // Écouter les changements d'auth
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event, session?.user?.email);
-      setUser(session?.user ?? null);
+      
+      // Force un petit délai pour laisser les cookies se propager sur mobile
+      if (event === 'SIGNED_IN' && session?.user) {
+        setTimeout(() => {
+          setUser(session.user);
+        }, 100);
+      } else {
+        setUser(session?.user ?? null);
+      }
       
       if (session?.user) {
         const { data: profile } = await supabase
