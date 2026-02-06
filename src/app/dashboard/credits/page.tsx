@@ -361,7 +361,7 @@ export default function CreditsPage() {
       )}
 
       {/* Info tooltip */}
-      <div className="mt-6 md:mt-8 flex justify-center">
+      <div className="mt-6 md:mt-8 flex justify-start">
         <div className="relative">
           <button
             onClick={() => setShowInfo(!showInfo)}
@@ -375,7 +375,7 @@ export default function CreditsPage() {
             <motion.div
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 p-3 bg-gray-900 text-white text-xs rounded-xl shadow-lg z-10"
+              className="absolute bottom-full left-0 mb-2 w-72 p-3 bg-gray-900 text-white text-xs rounded-xl shadow-lg z-10"
             >
               <ul className="space-y-1">
                 <li>• <strong>Packs :</strong> Achat unique, crédits valables à vie</li>
@@ -383,7 +383,7 @@ export default function CreditsPage() {
                 <li>• <strong>10 crédits</strong> = 1 miniature ou 1 recherche d&apos;idées</li>
                 <li>• <strong>20 crédits</strong> = 1 stratégie SEO avec Roman</li>
               </ul>
-              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45" />
+              <div className="absolute -bottom-1 left-6 w-2 h-2 bg-gray-900 rotate-45" />
             </motion.div>
           )}
         </div>
