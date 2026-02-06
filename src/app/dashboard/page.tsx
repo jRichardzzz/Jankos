@@ -10,30 +10,6 @@ import AliceImage from "@/Alice-removebg.png";
 import DouglasImage from "@/Douglas-removebg.png";
 import RomanImage from "@/Roman-removebg.png";
 
-const quickActions = [
-  { 
-    icon: "🎨", 
-    label: "Créer une miniature", 
-    href: "/dashboard/alice",
-    gradient: "from-pink-500 to-rose-500",
-    shadowColor: "shadow-pink-500/20 hover:shadow-pink-500/40",
-  },
-  { 
-    icon: "🔥", 
-    label: "Idées virales", 
-    href: "/dashboard/douglas",
-    gradient: "from-violet-500 to-indigo-500",
-    shadowColor: "shadow-violet-500/20 hover:shadow-violet-500/40",
-  },
-  { 
-    icon: "🔍", 
-    label: "Stratégie SEO", 
-    href: "/dashboard/roman",
-    gradient: "from-teal-500 to-emerald-500",
-    shadowColor: "shadow-teal-500/20 hover:shadow-teal-500/40",
-  },
-];
-
 const agents = [
   {
     id: "alice",
@@ -92,79 +68,6 @@ export default function DashboardPage() {
         <p className="text-gray-500 mt-1">Que voulez-vous créer aujourd&apos;hui ?</p>
       </motion.div>
 
-      {/* Quick actions - Hidden on mobile */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="hidden md:flex flex-wrap gap-4 mb-10"
-      >
-        {quickActions.map((action, index) => (
-          <motion.div
-            key={action.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
-            whileHover={{ scale: 1.03, y: -2 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Link
-              href={action.href}
-              className={`
-                group
-                relative
-                flex items-center gap-3
-                px-6 py-4
-                bg-white
-                border border-gray-100
-                rounded-2xl
-                overflow-hidden
-                shadow-lg ${action.shadowColor}
-                transition-all duration-300
-              `}
-            >
-              {/* Gradient background on hover */}
-              <div className={`
-                absolute inset-0 
-                bg-gradient-to-r ${action.gradient}
-                opacity-0 group-hover:opacity-100
-                transition-opacity duration-300
-              `} />
-              
-              {/* Icon container */}
-              <div className={`
-                relative z-10
-                w-10 h-10
-                rounded-xl
-                bg-gradient-to-br ${action.gradient}
-                flex items-center justify-center
-                text-lg
-                shadow-md
-                group-hover:bg-white/20
-                transition-all duration-300
-              `}>
-                <span className="group-hover:scale-110 transition-transform duration-300">{action.icon}</span>
-              </div>
-              
-              {/* Label */}
-              <span className="relative z-10 font-semibold text-gray-800 group-hover:text-white transition-colors duration-300">
-                {action.label}
-              </span>
-              
-              {/* Arrow icon */}
-              <svg 
-                className="relative z-10 w-5 h-5 ml-auto text-gray-400 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor" 
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Link>
-          </motion.div>
-        ))}
-      </motion.div>
 
       {/* Agents section */}
       <motion.div 
