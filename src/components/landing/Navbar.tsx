@@ -21,6 +21,17 @@ export function Navbar() {
   
   // Client Supabase mémorisé pour éviter les recréations
   const supabase = useMemo(() => createClient(), []);
+  
+  // Détecter si on vient d'une authentification et forcer le refresh
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('authenticated') === 'true') {
+      // Nettoyer l'URL
+      window.history.replaceState({}, '', window.location.pathname);
+      // Forcer un reload complet pour synchroniser l'état auth
+      window.location.reload();
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -42,10 +42,10 @@ export async function GET(request: Request) {
       const userId = data.user?.id;
       const isNewUser = data.user?.created_at === data.user?.updated_at;
       
-      // Créer la réponse de redirection
+      // Créer la réponse de redirection avec paramètre pour forcer refresh
       const redirectUrl = isNewUser && userId
         ? `${origin}/auth/complete?userId=${userId}&next=${next}`
-        : `${origin}${next}`;
+        : `${origin}${next}${next.includes('?') ? '&' : '?'}authenticated=true`;
       
       const response = NextResponse.redirect(redirectUrl);
       
