@@ -21,17 +21,6 @@ export function Navbar() {
   
   // Client Supabase mémorisé pour éviter les recréations
   const supabase = useMemo(() => createClient(), []);
-  
-  // Détecter si on vient d'une authentification et forcer le refresh
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('authenticated') === 'true') {
-      // Nettoyer l'URL
-      window.history.replaceState({}, '', window.location.pathname);
-      // Forcer un reload complet pour synchroniser l'état auth
-      window.location.reload();
-    }
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,49 +35,17 @@ export function Navbar() {
     // Vérifier si l'utilisateur est connecté
     const checkUser = async () => {
       try {
-        // Forcer un refresh de session pour s'assurer que les tokens sont à jour
-        const { data: refreshData } = await supabase.auth.refreshSession();
+        const { data: { user } } = await supabase.auth.getUser();
+        setUser(user);
         
-        if (refreshData?.session?.user) {
-          setUser(refreshData.session.user);
-          
-          // Récupérer les crédits
+        if (user) {
           const { data: profile } = await supabase
             .from('profiles')
             .select('credits')
-            .eq('id', refreshData.session.user.id)
+            .eq('id', user.id)
             .single();
           if (profile) {
             setCredits(profile.credits);
-          }
-        } else {
-          // Fallback sur getSession puis getUser
-          const { data: { session } } = await supabase.auth.getSession();
-          
-          if (session?.user) {
-            setUser(session.user);
-            const { data: profile } = await supabase
-              .from('profiles')
-              .select('credits')
-              .eq('id', session.user.id)
-              .single();
-            if (profile) {
-              setCredits(profile.credits);
-            }
-          } else {
-            const { data: { user } } = await supabase.auth.getUser();
-            setUser(user);
-            
-            if (user) {
-              const { data: profile } = await supabase
-                .from('profiles')
-                .select('credits')
-                .eq('id', user.id)
-                .single();
-              if (profile) {
-                setCredits(profile.credits);
-              }
-            }
           }
         }
       } catch (error) {

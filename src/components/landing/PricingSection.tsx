@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 
@@ -89,7 +88,6 @@ const pricingPlans = [
 ];
 
 export function PricingSection() {
-  const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
   const [selectedCredits, setSelectedCredits] = useState<{ [key: string]: number }>({
     "À la carte": 0,
@@ -103,18 +101,22 @@ export function PricingSection() {
   const handlePurchase = async (planName: string) => {
     setIsLoading(planName);
     
-    // Vérifier si l'utilisateur est connecté
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      // Rediriger vers la page de connexion
-      router.push('/login?redirect=/dashboard/credits');
-      return;
+    try {
+      // Vérifier si l'utilisateur est connecté
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        // Rediriger vers la page de connexion
+        window.location.href = '/login?redirect=/dashboard/credits';
+        return;
+      }
+      
+      // Rediriger vers la page de crédits du dashboard
+      window.location.href = '/dashboard/credits';
+    } catch (error) {
+      console.error('Error:', error);
+      window.location.href = '/login?redirect=/dashboard/credits';
     }
-    
-    // Rediriger vers la page de crédits du dashboard
-    router.push('/dashboard/credits');
-    setIsLoading(null);
   };
 
   return (
