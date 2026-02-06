@@ -147,12 +147,15 @@ export async function POST(req: NextRequest) {
           }
 
         } else if (type === 'subscription') {
+          const planId = session.metadata?.planId || '';
+          
           // Mettre à jour le profil avec l'abonnement
           const { error: updateError } = await getSupabaseAdmin()
             .from('profiles')
             .update({ 
               subscription_status: 'active',
               subscription_credits: credits,
+              subscription_plan: planId,
               stripe_customer_id: session.customer as string,
               updated_at: new Date().toISOString()
             })
