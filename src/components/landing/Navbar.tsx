@@ -46,34 +46,48 @@ export function Navbar() {
     // Vérifier si l'utilisateur est connecté
     const checkUser = async () => {
       try {
-        // D'abord essayer getSession pour forcer le refresh des cookies
-        const { data: { session } } = await supabase.auth.getSession();
+        // Forcer un refresh de session pour s'assurer que les tokens sont à jour
+        const { data: refreshData } = await supabase.auth.refreshSession();
         
-        if (session?.user) {
-          setUser(session.user);
+        if (refreshData?.session?.user) {
+          setUser(refreshData.session.user);
           
           // Récupérer les crédits
           const { data: profile } = await supabase
             .from('profiles')
             .select('credits')
-            .eq('id', session.user.id)
+            .eq('id', refreshData.session.user.id)
             .single();
           if (profile) {
             setCredits(profile.credits);
           }
         } else {
-          // Fallback sur getUser si pas de session
-          const { data: { user } } = await supabase.auth.getUser();
-          setUser(user);
+          // Fallback sur getSession puis getUser
+          const { data: { session } } = await supabase.auth.getSession();
           
-          if (user) {
+          if (session?.user) {
+            setUser(session.user);
             const { data: profile } = await supabase
               .from('profiles')
               .select('credits')
-              .eq('id', user.id)
+              .eq('id', session.user.id)
               .single();
             if (profile) {
               setCredits(profile.credits);
+            }
+          } else {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
+            
+            if (user) {
+              const { data: profile } = await supabase
+                .from('profiles')
+                .select('credits')
+                .eq('id', user.id)
+                .single();
+              if (profile) {
+                setCredits(profile.credits);
+              }
             }
           }
         }
@@ -89,15 +103,7 @@ export function Navbar() {
     // Écouter les changements d'auth
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event, session?.user?.email);
-      
-      // Force un petit délai pour laisser les cookies se propager sur mobile
-      if (event === 'SIGNED_IN' && session?.user) {
-        setTimeout(() => {
-          setUser(session.user);
-        }, 100);
-      } else {
-        setUser(session?.user ?? null);
-      }
+      setUser(session?.user ?? null);
       
       if (session?.user) {
         const { data: profile } = await supabase
