@@ -32,17 +32,17 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    // Vérifier si l'utilisateur est connecté
+    // Fonction pour vérifier et charger l'utilisateur
     const checkUser = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        setUser(user);
+        const { data: { user: currentUser } } = await supabase.auth.getUser();
+        setUser(currentUser);
         
-        if (user) {
+        if (currentUser) {
           const { data: profile } = await supabase
             .from('profiles')
             .select('credits')
-            .eq('id', user.id)
+            .eq('id', currentUser.id)
             .single();
           if (profile) {
             setCredits(profile.credits);
@@ -55,7 +55,25 @@ export function Navbar() {
       }
     };
     
+    // Check initial
     checkUser();
+
+    // Re-vérifier quand la page reprend le focus (retour d'OAuth, changement d'onglet)
+    const handleFocus = () => {
+      checkUser();
+    };
+    window.addEventListener('focus', handleFocus);
+
+    // Re-vérifier quand la page redevient visible
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        checkUser();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // Re-vérifier après un court délai (pour les redirections OAuth)
+    const delayedCheck = setTimeout(checkUser, 1000);
 
     // Écouter les changements d'auth
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -76,7 +94,12 @@ export function Navbar() {
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      clearTimeout(delayedCheck);
+    };
   }, [supabase]);
 
   return (

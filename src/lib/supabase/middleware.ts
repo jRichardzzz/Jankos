@@ -22,28 +22,19 @@ export async function updateSession(request: NextRequest) {
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, {
-              ...options,
-              // Assurer la compatibilité mobile
-              sameSite: 'lax',
-              secure: process.env.NODE_ENV === 'production',
-              path: '/',
-            })
+            supabaseResponse.cookies.set(name, value, options)
           );
         },
       },
     }
   );
 
-  // IMPORTANT: Avoid writing any logic between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
-
+  // IMPORTANT: Ne rien mettre entre createServerClient et getUser()
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Routes protégées - rediriger vers login si non connecté
+  // Routes protégées
   if (
     !user &&
     request.nextUrl.pathname.startsWith('/dashboard')
@@ -63,5 +54,6 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // IMPORTANT: toujours retourner supabaseResponse pour que les cookies soient rafraîchis
   return supabaseResponse;
 }

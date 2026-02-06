@@ -1,25 +1,51 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
   const next = searchParams.get('next') ?? '/dashboard';
 
+  // Déterminer l'origine correcte (jankos.cc)
+  const forwardedHost = request.headers.get('x-forwarded-host');
+  const forwardedProto = request.headers.get('x-forwarded-proto') || 'https';
+  const origin = forwardedHost 
+    ? `${forwardedProto}://${forwardedHost}` 
+    : new URL(request.url).origin;
+
   if (code) {
-    const supabase = await createClient();
+    const cookieStore = await cookies();
+    
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options);
+            });
+          },
+        },
+      }
+    );
+
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     
     if (!error && data.session) {
       const userId = data.user?.id;
       const isNewUser = data.user?.created_at === data.user?.updated_at;
       
-      // Rediriger vers la page de succès qui forcera un reload après délai
-      const finalDestination = isNewUser && userId
-        ? `/auth/complete?userId=${userId}&next=${next}`
-        : next;
+      if (isNewUser && userId) {
+        return NextResponse.redirect(`${origin}/auth/complete?userId=${userId}&next=${next}`);
+      }
       
-      return NextResponse.redirect(`${origin}/auth/success?next=${encodeURIComponent(finalDestination)}`);
+      // Redirection directe vers le dashboard
+      return NextResponse.redirect(`${origin}${next}`);
     }
     
     console.error('Auth callback error:', error);
