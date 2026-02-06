@@ -91,23 +91,23 @@ export default function CreditsPage() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
+      <div className="flex items-center justify-between gap-3 mb-6 md:mb-8">
+        <div className="flex-1 min-w-0">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-4 transition-colors"
+            className="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-900 mb-2 md:mb-4 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Retour</span>
+            <ArrowLeft className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            <span className="text-xs md:text-sm font-medium">Retour</span>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Acheter des crédits</h1>
-          <p className="text-gray-500">Rechargez votre compte pour continuer à utiliser les agents</p>
+          <h1 className="text-lg md:text-2xl font-bold text-gray-900">Acheter des crédits</h1>
+          <p className="text-xs md:text-sm text-gray-500 truncate">Rechargez votre compte pour continuer à utiliser les agents</p>
         </div>
-        <div className="flex items-center gap-3 px-4 py-2 bg-amber-50 rounded-xl border border-amber-200">
-          <Zap className="w-5 h-5 text-amber-600" />
+        <div className="flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-4 md:py-2 bg-amber-50 rounded-lg md:rounded-xl border border-amber-200 flex-shrink-0">
+          <Zap className="w-4 h-4 md:w-5 md:h-5 text-amber-600" />
           <div>
-            <p className="text-xs text-amber-600 font-medium">Solde actuel</p>
-            <p className="text-lg font-bold text-amber-700">{credits} crédits</p>
+            <p className="text-[10px] md:text-xs text-amber-600 font-medium">Solde actuel</p>
+            <p className="text-sm md:text-lg font-bold text-amber-700">{credits} crédits</p>
           </div>
         </div>
       </div>
@@ -133,10 +133,10 @@ export default function CreditsPage() {
       )}
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-8 p-1 bg-gray-100 rounded-xl w-fit">
+      <div className="flex gap-1 md:gap-2 mb-6 md:mb-8 p-1 bg-gray-100 rounded-lg md:rounded-xl w-fit">
         <button
           onClick={() => setActiveTab('packs')}
-          className={`px-6 py-2.5 rounded-lg font-medium transition-all ${
+          className={`px-4 md:px-6 py-2 md:py-2.5 rounded-md md:rounded-lg text-sm md:text-base font-medium transition-all ${
             activeTab === 'packs'
               ? 'bg-white text-gray-900 shadow-sm'
               : 'text-gray-500 hover:text-gray-700'
@@ -146,7 +146,7 @@ export default function CreditsPage() {
         </button>
         <button
           onClick={() => setActiveTab('subscription')}
-          className={`px-6 py-2.5 rounded-lg font-medium transition-all ${
+          className={`px-4 md:px-6 py-2 md:py-2.5 rounded-md md:rounded-lg text-sm md:text-base font-medium transition-all ${
             activeTab === 'subscription'
               ? 'bg-white text-gray-900 shadow-sm'
               : 'text-gray-500 hover:text-gray-700'
@@ -159,7 +159,7 @@ export default function CreditsPage() {
       {activeTab === 'packs' ? (
         <>
           {/* Credit Packs Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mb-6 md:mb-8">
             {creditPacks.map((pack, index) => (
               <motion.button
                 key={pack.credits}
@@ -167,31 +167,31 @@ export default function CreditsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
                 onClick={() => setSelectedPack(index)}
-                className={`relative p-6 rounded-2xl border-2 transition-all text-left ${
+                className={`relative p-3 md:p-6 rounded-xl md:rounded-2xl border-2 transition-all text-left ${
                   selectedPack === index
                     ? 'border-amber-500 bg-amber-50'
                     : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
                 {pack.popular && (
-                  <span className="absolute -top-2 left-4 px-2 py-0.5 bg-amber-500 text-white text-xs font-bold rounded-full">
+                  <span className="absolute -top-2 left-2 md:left-4 px-1.5 md:px-2 py-0.5 bg-amber-500 text-white text-[10px] md:text-xs font-bold rounded-full">
                     Populaire
                   </span>
                 )}
-                <div className="flex items-center gap-2 mb-3">
-                  <Zap className={`w-5 h-5 ${selectedPack === index ? 'text-amber-600' : 'text-gray-400'}`} />
-                  <span className="text-2xl font-bold text-gray-900">{pack.credits}</span>
-                  <span className="text-gray-500">crédits</span>
+                <div className="flex items-center gap-1 md:gap-2 mb-2 md:mb-3">
+                  <Zap className={`w-4 h-4 md:w-5 md:h-5 ${selectedPack === index ? 'text-amber-600' : 'text-gray-400'}`} />
+                  <span className="text-lg md:text-2xl font-bold text-gray-900">{pack.credits}</span>
+                  <span className="text-xs md:text-base text-gray-500">crédits</span>
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-black text-gray-900">{pack.price.toLocaleString('fr-FR')}€</span>
+                  <span className="text-xl md:text-3xl font-black text-gray-900">{pack.price.toLocaleString('fr-FR')}€</span>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-[10px] md:text-xs text-gray-400 mt-0.5 md:mt-1">
                   {(pack.price / pack.credits).toFixed(2)}€ / crédit
                 </p>
                 {selectedPack === index && (
-                  <div className="absolute top-4 right-4 w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center">
-                    <Check className="w-4 h-4 text-white" />
+                  <div className="absolute top-2 md:top-4 right-2 md:right-4 w-5 h-5 md:w-6 md:h-6 bg-amber-500 rounded-full flex items-center justify-center">
+                    <Check className="w-3 h-3 md:w-4 md:h-4 text-white" />
                   </div>
                 )}
               </motion.button>
@@ -204,7 +204,7 @@ export default function CreditsPage() {
             whileTap={{ scale: isLoading ? 1 : 0.98 }}
             onClick={handlePurchase}
             disabled={selectedPack === null || isLoading}
-            className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all ${
+            className={`w-full py-3 md:py-4 rounded-lg md:rounded-xl font-bold text-sm md:text-lg flex items-center justify-center gap-2 transition-all ${
               selectedPack !== null && !isLoading
                 ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
@@ -212,14 +212,15 @@ export default function CreditsPage() {
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Redirection vers Stripe...
+                <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />
+                <span className="hidden md:inline">Redirection vers Stripe...</span>
+                <span className="md:hidden">Chargement...</span>
               </>
             ) : (
               <>
-                <CreditCard className="w-5 h-5" />
+                <CreditCard className="w-4 h-4 md:w-5 md:h-5" />
                 {selectedPack !== null
-                  ? `Acheter ${creditPacks[selectedPack].credits} crédits pour ${creditPacks[selectedPack].price.toLocaleString('fr-FR')}€`
+                  ? <><span className="hidden md:inline">Acheter {creditPacks[selectedPack].credits} crédits pour {creditPacks[selectedPack].price.toLocaleString('fr-FR')}€</span><span className="md:hidden">{creditPacks[selectedPack].credits} crédits - {creditPacks[selectedPack].price.toLocaleString('fr-FR')}€</span></>
                   : 'Sélectionnez un pack'}
               </>
             )}

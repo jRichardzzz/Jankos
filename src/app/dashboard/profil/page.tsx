@@ -160,42 +160,51 @@ export default function ProfilPage() {
         </motion.div>
       </div>
 
-      {/* Quick Actions */}
+      {/* Agents IA */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm"
+        className="bg-white rounded-2xl border border-gray-200 p-4 md:p-6 shadow-sm"
       >
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <User className="w-5 h-5 text-amber-500" />
-          Actions rapides
+        <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
+          <User className="w-4 h-4 md:w-5 md:h-5 text-amber-500" />
+          Mes Agents IA
         </h3>
         
-        <div className="grid grid-cols-2 gap-4">
-          <a
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <Link
             href="/dashboard/alice"
-            className="flex items-center gap-3 p-4 bg-pink-50 rounded-xl hover:bg-pink-100 transition-colors"
+            className="flex items-center gap-3 p-3 md:p-4 bg-pink-50 rounded-xl hover:bg-pink-100 transition-colors"
           >
-            <div className="w-10 h-10 rounded-lg bg-pink-500 flex items-center justify-center text-white font-bold">A</div>
-            <div>
-              <p className="font-medium text-gray-900">Créer une miniature</p>
-              <p className="text-sm text-gray-500">Avec Alice</p>
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-pink-500 flex items-center justify-center text-white font-bold text-sm">A</div>
+            <div className="min-w-0">
+              <p className="font-medium text-gray-900 text-sm md:text-base">Alice</p>
+              <p className="text-xs md:text-sm text-gray-500 truncate">Miniatures YouTube</p>
             </div>
-          </a>
+          </Link>
           
-          <a
-            href="/dashboard/realisations"
-            className="flex items-center gap-3 p-4 bg-amber-50 rounded-xl hover:bg-amber-100 transition-colors"
+          <Link
+            href="/dashboard/douglas"
+            className="flex items-center gap-3 p-3 md:p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors"
           >
-            <div className="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center">
-              <FolderOpen className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-blue-500 flex items-center justify-center text-white font-bold text-sm">D</div>
+            <div className="min-w-0">
+              <p className="font-medium text-gray-900 text-sm md:text-base">Douglas</p>
+              <p className="text-xs md:text-sm text-gray-500 truncate">Idées virales</p>
             </div>
-            <div>
-              <p className="font-medium text-gray-900">Mes réalisations</p>
-              <p className="text-sm text-gray-500">Voir tout</p>
+          </Link>
+          
+          <Link
+            href="/dashboard/roman"
+            className="flex items-center gap-3 p-3 md:p-4 bg-violet-50 rounded-xl hover:bg-violet-100 transition-colors"
+          >
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-violet-500 flex items-center justify-center text-white font-bold text-sm">R</div>
+            <div className="min-w-0">
+              <p className="font-medium text-gray-900 text-sm md:text-base">Roman</p>
+              <p className="text-xs md:text-sm text-gray-500 truncate">Stratégie SEO</p>
             </div>
-          </a>
+          </Link>
         </div>
       </motion.div>
     </div>
