@@ -2,12 +2,13 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
-import { Loader2, AlertCircle, CheckCircle, Gift } from 'lucide-react';
+import { Loader2, AlertCircle, Gift } from 'lucide-react';
 
 function SignupContent() {
+  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,7 +16,6 @@ function SignupContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingSocial, setIsLoadingSocial] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
   const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
 
   const supabase = createClient();
@@ -88,8 +88,9 @@ function SignupContent() {
       return;
     }
 
-    setSuccess(true);
-    setIsLoading(false);
+    // Redirection directe vers le dashboard
+    router.push('/dashboard');
+    router.refresh();
   };
 
   const handleSocialLogin = async (provider: 'google' | 'facebook' | 'apple') => {
@@ -108,43 +109,6 @@ function SignupContent() {
       setIsLoadingSocial(null);
     }
   };
-
-  if (success) {
-    return (
-      <div className="min-h-screen bg-neutral-950 flex items-center justify-center p-4">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="relative w-full max-w-md bg-neutral-900/80 backdrop-blur-xl border border-neutral-800 rounded-2xl p-8 text-center"
-        >
-          <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-8 h-8 text-green-500" />
-          </div>
-          <h1 className="text-2xl font-bold text-white mb-3">
-            Vérifiez votre email
-          </h1>
-          <p className="text-neutral-400 mb-6">
-            Nous avons envoyé un lien de confirmation à<br />
-            <span className="text-white font-medium">{email}</span>
-          </p>
-          <p className="text-sm text-neutral-500 mb-6">
-            Cliquez sur le lien dans l&apos;email pour activer votre compte et commencer à utiliser Jankos.cc
-          </p>
-          <Link
-            href="/login"
-            className="inline-flex items-center justify-center w-full py-3 bg-neutral-800 text-white font-semibold rounded-xl hover:bg-neutral-700 transition-colors"
-          >
-            Retour à la connexion
-          </Link>
-        </motion.div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-neutral-950 flex items-center justify-center p-4">
